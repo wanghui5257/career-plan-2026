@@ -4,20 +4,6 @@ server:
 spring:
   application:
     name: career-plan-2026
-  jackson:
-    default-property-inclusion: non_null
-
-management:
-  endpoints:
-    web:
-      exposure:
-        include: health,info,metrics
-  endpoint:
-    health:
-      show-details: when_authorized
-      probes:
-        enabled: true
-
   datasource:
     url: jdbc:mysql://localhost:3306/career_plan?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
     username: career_user
@@ -31,6 +17,19 @@ management:
       hibernate:
         format_sql: true
         dialect: org.hibernate.dialect.MySQLDialect
+  jackson:
+    default-property-inclusion: non_null
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      show-details: when_authorized
+      probes:
+        enabled: true
 
 jwt:
   secret: v9Kx+L2RqP7mZ4wE1tY6uI8oA3sD5fG0hJ9kL1mN4pQ=
