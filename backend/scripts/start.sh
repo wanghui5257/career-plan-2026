@@ -2,11 +2,12 @@
 
 APP_NAME="career-plan-2026"
 APP_DIR="/opt/career-plan"
+APP_PORT="9999"
 JAR_FILE="$APP_DIR/backend/target/${APP_NAME}-1.0.0.jar"
 PID_FILE="$APP_DIR/app.pid"
 LOG_FILE="$APP_DIR/app.log"
 
-echo "Starting $APP_NAME..."
+echo "Starting $APP_NAME on port $APP_PORT..."
 
 # Check if already running
 if [ -f "$PID_FILE" ]; then
