@@ -4,6 +4,20 @@ server:
 spring:
   application:
     name: career-plan-2026
+  jackson:
+    default-property-inclusion: non_null
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      show-details: when_authorized
+      probes:
+        enabled: true
+
   datasource:
     url: jdbc:mysql://localhost:3306/career_plan?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
     username: career_user
