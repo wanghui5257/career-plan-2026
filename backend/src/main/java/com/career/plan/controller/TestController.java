@@ -13,29 +13,25 @@ public class TestController {
 
     private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
-    @GetMapping("/password")
-    public Map<String, Object> testPassword() {
+    @GetMapping("/hash")
+    public Map<String, Object> generateHash(@RequestParam(defaultValue = "admin123") String password) {
         Map<String, Object> result = new HashMap<>();
-        
-        String plainPassword = "admin123";
-        String hashedPassword = "$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy";
-        
-        boolean matches = encoder.matches(plainPassword, hashedPassword);
-        
-        result.put("plainPassword", plainPassword);
-        result.put("hashedPassword", hashedPassword);
-        result.put("matches", matches);
-        result.put("encoder", "BCrypt");
-        
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        String hash = encoder.encode(password);
+        result.put("password", password);
+        result.put("hash", hash);
+        result.put("sql", "UPDATE users SET password = '" + hash + "' WHERE username = 'admin';");
         return result;
     }
     
-    @GetMapping("/bcrypt")
-    public Map<String, Object> generateBcrypt(@RequestParam String password) {
+    @GetMapping("/verify")
+    public Map<String, Object> verifyPassword(@RequestParam String password, @RequestParam String hash) {
         Map<String, Object> result = new HashMap<>();
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        boolean matches = encoder.matches(password, hash);
         result.put("password", password);
-        result.put("bcrypt", encoder.encode(password));
+        result.put("hash", hash);
+        result.put("matches", matches);
         return result;
     }
 }
