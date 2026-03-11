@@ -14,8 +14,13 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @Service
 public class UserService {
+
+    private static final Logger log = LoggerFactory.getLogger(UserService.class);
 
     @Autowired
     private UserRepository userRepository;
@@ -29,14 +34,31 @@ public class UserService {
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     public LoginResponse login(String username, String password) {
+        log.info("=== 登录请求 ===");
+        log.info("用户名：{}", username);
+        
         User user = userRepository.findByUsername(username)
-            .orElseThrow(() -> new RuntimeException("用户不存在"));
+            .orElseThrow(() -> {
+                log.error("用户不存在：{}", username);
+                return new RuntimeException("用户不存在");
+            });
 
-        if (!passwordEncoder.matches(password, user.getPassword())) {
+        log.info("找到用户：{}", user.getUsername());
+        log.info("数据库密码哈希：{}", user.getPassword());
+        log.info("密码哈希前缀：{}", user.getPassword().substring(0, 20));
+        
+        boolean matches = passwordEncoder.matches(password, user.getPassword());
+        log.info("密码验证结果：{}", matches);
+        
+        if (!matches) {
+            log.error("密码错误 - 输入密码：{}, 数据库哈希：{}", password, user.getPassword());
             throw new RuntimeException("密码错误");
         }
 
+        log.info("密码验证通过，生成 Token...");
         String token = generateToken(user);
+        log.info("Token 生成成功");
+        
         return new LoginResponse(200, "登录成功", token, jwtExpiration);
     }
 
