@@ -1,0 +1,230 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  background: #f5f5f5;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+/* 任务看板样式 */
+.task-board {
+  display: flex;
+  gap: 16px;
+  padding: 24px;
+  overflow-x: auto;
+  min-height: calc(100vh - 120px);
+}
+
+.board-column {
+  flex: 1;
+  min-width: 280px;
+  max-width: 350px;
+  background: #f9fafb;
+  border-radius: 8px;
+  padding: 16px;
+}
+
+.column-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid;
+}
+
+.column-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.task-count {
+  background: #e5e7eb;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  color: #6b7280;
+}
+
+/* 任务卡片样式 */
+.task-card {
+  background: white;
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.task-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transform: translateY(-2px);
+}
+
+.task-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 8px;
+}
+
+.task-card-title {
+  font-size: 14px;
+  font-weight: 500;
+  color: #1f2937;
+  line-height: 1.4;
+}
+
+.task-card-description {
+  font-size: 13px;
+  color: #6b7280;
+  margin-bottom: 12px;
+  line-height: 1.5;
+}
+
+.task-card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid #f3f4f6;
+}
+
+.task-card-tags {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.task-tag {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 4px;
+  background: #e5e7eb;
+  color: #4b5563;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 6px;
+  background: #e5e7eb;
+  border-radius: 3px;
+  overflow: hidden;
+  margin-top: 8px;
+}
+
+.progress-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.3s ease;
+}
+
+/* 优先级颜色 */
+.priority-urgent { background: #ef4444; }
+.priority-high { background: #f97316; }
+.priority-medium { background: #eab308; }
+.priority-low { background: #22c55e; }
+
+/* 状态颜色 */
+.status-todo { border-color: #6b7280; }
+.status-in_progress { border-color: #3b82f6; }
+.status-completed { border-color: #22c55e; }
+.status-blocked { border-color: #ef4444; }
+
+/* 响应式设计 */
+@media (max-width: 1199px) {
+  .task-board {
+    gap: 12px;
+    padding: 16px;
+  }
+  
+  .board-column {
+    min-width: 250px;
+  }
+}
+
+@media (max-width: 767px) {
+  .task-board {
+    flex-direction: column;
+    padding: 12px;
+    overflow-x: visible;
+  }
+  
+  .board-column {
+    min-width: 100%;
+    max-width: 100%;
+    margin-bottom: 16px;
+  }
+  
+  .task-card {
+    padding: 12px;
+  }
+  
+  .task-card-title {
+    font-size: 13px;
+  }
+  
+  .column-header {
+    margin-bottom: 12px;
+  }
+}
+
+/* 日历视图样式 */
+.fc {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif !important;
+}
+
+.fc-toolbar-title {
+  font-size: 1.25em !important;
+}
+
+.fc-event {
+  cursor: pointer !important;
+  border: none !important;
+}
+
+.fc-event-title {
+  font-weight: 500 !important;
+}
+
+/* 图表容器 */
+.recharts-wrapper {
+  margin: 0 auto;
+}
+
+/* 统计卡片 */
+.ant-statistic {
+  text-align: center;
+}
+
+/* 暗色主题适配 */
+.dark-theme .task-card {
+  background: #1f1f1f;
+  color: #e0e0e0;
+}
+
+.dark-theme .task-card-title {
+  color: #e0e0e0;
+}
+
+.dark-theme .task-card-description {
+  color: #a0a0a0;
+}
+
+.dark-theme .board-column {
+  background: #141414;
+}
+
+.dark-theme .column-title {
+  color: #e0e0e0;
+}
