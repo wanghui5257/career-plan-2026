@@ -1,5 +1,7 @@
 server:
   port: 9999
+  servlet:
+    context-path: /back-server
 
 spring:
   application:
@@ -33,7 +35,7 @@ management:
 
 jwt:
   secret: v9Kx+L2RqP7mZ4wE1tY6uI8oA3sD5fG0hJ9kL1mN4pQ=
-  expiration: 86400000  # 24 hours
+  expiration: 86400000
 
 springdoc:
   api-docs:
