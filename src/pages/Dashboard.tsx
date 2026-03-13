@@ -31,7 +31,7 @@ import TaskEditor from '../components/TaskEditor'
 import { useTaskStore } from '../store'
 import { Task } from '../types/task'
 import { message } from 'antd'
-import { isAuthenticated, clearAuth, getToken } from '../utils/auth'
+import { clearAuth } from '../utils/auth'
 
 const { Header, Content, Sider } = Layout
 

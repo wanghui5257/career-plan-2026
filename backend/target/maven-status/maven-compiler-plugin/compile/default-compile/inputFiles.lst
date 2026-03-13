@@ -1,0 +1,17 @@
+/home/career-plan/career-plan-2026/backend/src/main/java/com/career/plan/dto/LoginResponse.java
+/home/career-plan/career-plan-2026/backend/src/main/java/com/career/plan/controller/TaskController.java
+/home/career-plan/career-plan-2026/backend/src/main/java/com/career/plan/entity/Task.java
+/home/career-plan/career-plan-2026/backend/src/main/java/com/career/plan/repository/UserRepository.java
+/home/career-plan/career-plan-2026/backend/src/main/java/com/career/plan/controller/DebugController.java
+/home/career-plan/career-plan-2026/backend/src/main/java/com/career/plan/controller/TestController.java
+/home/career-plan/career-plan-2026/backend/src/main/java/com/career/plan/dto/LoginRequest.java
+/home/career-plan/career-plan-2026/backend/src/main/java/com/career/plan/service/UserService.java
+/home/career-plan/career-plan-2026/backend/src/main/java/com/career/plan/entity/User.java
+/home/career-plan/career-plan-2026/backend/src/main/java/com/career/plan/config/OpenApiConfig.java
+/home/career-plan/career-plan-2026/backend/src/main/java/com/career/plan/repository/TaskRepository.java
+/home/career-plan/career-plan-2026/backend/src/main/java/com/career/plan/controller/AuthController.java
+/home/career-plan/career-plan-2026/backend/src/main/java/com/career/plan/CareerPlanApplication.java
+/home/career-plan/career-plan-2026/backend/src/main/java/com/career/plan/config/SecurityConfig.java
+/home/career-plan/career-plan-2026/backend/src/main/java/com/career/plan/controller/HealthController.java
+/home/career-plan/career-plan-2026/backend/src/main/java/com/career/plan/repository/ProgressReportRepository.java
+/home/career-plan/career-plan-2026/backend/src/main/java/com/career/plan/entity/ProgressReport.java
