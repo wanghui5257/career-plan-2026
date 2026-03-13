@@ -1,8 +1,8 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse, AxiosError } from 'axios'
 import { message } from 'antd'
 
-// API 基础配置 - 生产环境 HTTPS
-const API_BASE_URL = 'https://plan.shujuyunxiang.com/api/v1'
+// API 基础配置 - 生产环境 HTTPS (Context Path: /back-server)
+const API_BASE_URL = 'https://plan.shujuyunxiang.com/back-server/api/v1'
 
 // 创建 axios 实例
 const request: AxiosInstance = axios.create({

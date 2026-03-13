@@ -21,17 +21,6 @@ const CalendarView: React.FC<CalendarViewProps> = ({ tasks, onTaskUpdate, onTask
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false)
   const calendarRef = useRef<FullCalendar>(null)
 
-  // 将任务转换为日历事件
-  const events = tasks.map((task) => ({
-    id: task.id,
-    title: task.title,
-    start: task.startDate || task.createdAt,
-    end: task.dueDate,
-    backgroundColor: getTaskColor(task.status),
-    borderColor: getTaskColor(task.status),
-    extendedProps: { task },
-  }))
-
   // 根据任务状态获取颜色
   const getTaskColor = (status: Task['status']) => {
     const colors = {
@@ -40,8 +29,25 @@ const CalendarView: React.FC<CalendarViewProps> = ({ tasks, onTaskUpdate, onTask
       completed: '#52c41a',
       blocked: '#ff4d4f',
     }
-    return colors[status]
+    return colors[status] || '#1890ff'
   }
+
+  // 将任务转换为日历事件
+  const events = React.useMemo(() => 
+    tasks.filter(task => task.dueDate || task.startDate).map((task) => {
+      const color = getTaskColor(task.status)
+      return {
+        id: task.id,
+        title: task.title,
+        start: task.startDate ? new Date(task.startDate).toISOString().split('T')[0] : undefined,
+        end: task.dueDate ? new Date(task.dueDate).toISOString().split('T')[0] : undefined,
+        backgroundColor: color,
+        borderColor: color,
+        extendedProps: { task },
+      }
+    }).filter(event => event.start || event.end),
+    [tasks]
+  )
 
   // 处理事件点击
   const handleEventClick = (clickInfo: any) => {
@@ -132,7 +138,7 @@ const CalendarView: React.FC<CalendarViewProps> = ({ tasks, onTaskUpdate, onTask
   }
 
   return (
-    <div style={{ padding: '24px', background: '#fff', borderRadius: '8px' }}>
+    <div style={{ padding: '24px', background: '#fff', borderRadius: '8px', minHeight: '700px' }}>
       {/* 工具栏 */}
       <Space style={{ marginBottom: '16px', flexWrap: 'wrap' }} size="middle">
         <Button icon={<LeftOutlined />} onClick={handlePrev} />
@@ -186,7 +192,7 @@ const CalendarView: React.FC<CalendarViewProps> = ({ tasks, onTaskUpdate, onTask
         eventDrop={handleEventDrop}
         select={handleDateSelect}
         eventContent={renderEventContent}
-        height="auto"
+        height="650px"
         locale="zh-cn"
         firstDay={1}
         buttonText={{
@@ -196,6 +202,7 @@ const CalendarView: React.FC<CalendarViewProps> = ({ tasks, onTaskUpdate, onTask
           day: '日',
         }}
         allDayText="全天"
+        nowIndicator={true}
       />
 
       {/* 任务编辑器模态框 */}

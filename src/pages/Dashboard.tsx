@@ -30,6 +30,8 @@ import Charts from '../components/Charts'
 import TaskEditor from '../components/TaskEditor'
 import { useTaskStore } from '../store'
 import { Task } from '../types/task'
+import { message } from 'antd'
+import { isAuthenticated, clearAuth, getToken } from '../utils/auth'
 
 const { Header, Content, Sider } = Layout
 
@@ -171,11 +173,41 @@ const Dashboard: React.FC = () => {
     setIsEditorOpen(true)
   }
 
+  // 退出登录
+  const handleLogout = () => {
+    // 清除本地存储
+    clearAuth()
+    message.success('已退出登录')
+    // 使用 hash 路由跳转到登录页
+    window.location.hash = '/login'
+  }
+
   // 主题切换
   const toggleTheme = () => {
     setTheme({
       mode: theme.mode === 'light' ? 'dark' : 'light',
     })
+  }
+
+  // 侧边栏菜单点击处理
+  const handleMenuClick: MenuProps['onClick'] = (e) => {
+    switch (e.key) {
+      case 'board':
+        setViewMode('board')
+        break
+      case 'calendar':
+        setViewMode('calendar')
+        break
+      case 'charts':
+        setViewMode('charts')
+        break
+      case 'team':
+        message.info('🚧 团队成员功能开发中，敬请期待！')
+        break
+      case 'settings':
+        message.info('🚧 设置功能开发中，敬请期待！')
+        break
+    }
   }
 
   // 侧边栏菜单
@@ -184,19 +216,16 @@ const Dashboard: React.FC = () => {
       key: 'board',
       icon: <DashboardOutlined />,
       label: '任务看板',
-      onClick: () => setViewMode('board'),
     },
     {
       key: 'calendar',
       icon: <CalendarOutlined />,
       label: '日历视图',
-      onClick: () => setViewMode('calendar'),
     },
     {
       key: 'charts',
       icon: <BarChartOutlined />,
       label: '数据报表',
-      onClick: () => setViewMode('charts'),
     },
     {
       type: 'divider',
@@ -260,7 +289,7 @@ const Dashboard: React.FC = () => {
           >
             {collapsed ? 'CP' : '职业计划 2026'}
           </div>
-          <Menu theme="dark" mode="inline" selectedKeys={[viewMode]} items={menuItems} />
+          <Menu theme="dark" mode="inline" selectedKeys={[viewMode]} onClick={handleMenuClick} items={menuItems} />
         </Sider>
       )}
 
@@ -319,10 +348,10 @@ const Dashboard: React.FC = () => {
             <Dropdown
               menu={{
                 items: [
-                  { key: 'profile', label: '个人中心' },
-                  { key: 'settings', label: '设置' },
+                  { key: 'profile', label: '个人中心', onClick: () => message.info('🚧 个人中心功能开发中，敬请期待！') },
+                  { key: 'settings', label: '设置', onClick: () => message.info('🚧 设置功能开发中，敬请期待！') },
                   { type: 'divider' },
-                  { key: 'logout', label: '退出登录' },
+                  { key: 'logout', label: '退出登录', onClick: handleLogout },
                 ],
               }}
             >
@@ -351,7 +380,7 @@ const Dashboard: React.FC = () => {
         open={isMobile && !collapsed}
         width={250}
       >
-        <Menu mode="vertical" selectedKeys={[viewMode]} items={menuItems} />
+        <Menu mode="vertical" selectedKeys={[viewMode]} onClick={handleMenuClick} items={menuItems} />
       </Drawer>
 
       {/* 任务编辑器 */}
