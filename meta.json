@@ -1,0 +1,17 @@
+{
+  "taskId": "task-20260312-112500-book-study-plan",
+  "projectId": "career-development-2026",
+  "title": "《沟通的方法》书籍拆解与学习计划",
+  "description": "拆解 400 页书籍，制定每日阅读计划，输出学习路线和关键知识点总结",
+  "assignedTo": "learning-coach",
+  "roomId": "!ICKn4EvhynWY4K5cgC:matrix-local.hiclaw.io:18080",
+  "projectRoomId": "!ICKn4EvhynWY4K5cgC:matrix-local.hiclaw.io:18080",
+  "status": "assigned",
+  "type": "finite",
+  "priority": "medium",
+  "createdAt": "2026-03-12T11:25:00+08:00",
+  "assignedAt": "2026-03-12T11:25:00+08:00",
+  "dueAt": "2026-03-15T18:00:00+08:00",
+  "estimatedHours": 8,
+  "tags": ["learning", "book-study", "communication", "career-plan"]
+}
