@@ -12,7 +12,7 @@
 
 ```bash
 ssh root@47.115.63.159
-# 密码：A@walt365a
+# SSH 凭证已通过安全渠道存储，请联系 manager 获取
 ```
 
 ### 步骤 2: 运行自动验证脚本
@@ -41,7 +41,7 @@ UPDATE users SET password = '$2a$10$xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 **执行**:
 ```bash
 mysql -u root -p
-# 输入 MySQL root 密码
+# MySQL 凭证已通过安全渠道存储
 
 USE career_plan;
 # 复制脚本输出的 UPDATE 语句并执行
