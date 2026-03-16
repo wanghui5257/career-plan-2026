@@ -6,7 +6,7 @@
 
 ```bash
 ssh root@47.115.63.159
-# SSH 凭证已通过安全渠道存储，请联系 manager 获取
+<!-- SSH 凭证已通过安全渠道存储，请联系 manager 获取 -->
 ```
 
 ### 2. 更新代码
@@ -93,7 +93,7 @@ curl -m 10 -X GET http://[::1]:9999/api/v1/tasks \
 **解决方案**:
 ```bash
 mysql -u root -p
-# MySQL 凭证已通过安全渠道存储
+# 输入 MySQL root 密码
 
 USE career_plan;
 UPDATE users SET password = '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy' 
