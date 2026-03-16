@@ -1,0 +1,18 @@
+{
+  "taskId": "task-20260312-112500-job-market-analysis",
+  "projectId": "career-development-2026",
+  "title": "AI 行业就业市场趋势分析",
+  "description": "分析 AI/科技行业就业市场趋势，包括岗位需求、薪资范围、技能要求，输出目标公司推荐列表",
+  "assignedTo": "career-advisor",
+  "roomId": "!ICKn4EvhynWY4K5cgC:matrix-local.hiclaw.io:18080",
+  "projectRoomId": "!ICKn4EvhynWY4K5cgC:matrix-local.hiclaw.io:18080",
+  "status": "completed",
+  "completedAt": "2026-03-16T12:00:00+08:00",
+  "type": "finite",
+  "priority": "medium",
+  "createdAt": "2026-03-12T11:25:00+08:00",
+  "assignedAt": "2026-03-12T11:25:00+08:00",
+  "dueAt": "2026-03-17T18:00:00+08:00",
+  "estimatedHours": 12,
+  "tags": ["career", "job-market", "ai-industry", "career-plan"]
+}
