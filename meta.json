@@ -1,18 +1,17 @@
 {
-  "taskId": "task-20260312-112500-job-market-analysis",
+  "taskId": "task-20260312-112500-book-study-plan",
   "projectId": "career-development-2026",
-  "title": "AI 行业就业市场趋势分析",
-  "description": "分析 AI/科技行业就业市场趋势，包括岗位需求、薪资范围、技能要求，输出目标公司推荐列表",
-  "assignedTo": "career-advisor",
+  "title": "《沟通的方法》书籍拆解与学习计划",
+  "description": "拆解 400 页书籍，制定每日阅读计划，输出学习路线和关键知识点总结",
+  "assignedTo": "learning-coach",
   "roomId": "!ICKn4EvhynWY4K5cgC:matrix-local.hiclaw.io:18080",
   "projectRoomId": "!ICKn4EvhynWY4K5cgC:matrix-local.hiclaw.io:18080",
-  "status": "completed",
-  "completedAt": "2026-03-16T12:00:00+08:00",
+  "status": "assigned",
   "type": "finite",
   "priority": "medium",
   "createdAt": "2026-03-12T11:25:00+08:00",
   "assignedAt": "2026-03-12T11:25:00+08:00",
-  "dueAt": "2026-03-17T18:00:00+08:00",
-  "estimatedHours": 12,
-  "tags": ["career", "job-market", "ai-industry", "career-plan"]
+  "dueAt": "2026-03-15T18:00:00+08:00",
+  "estimatedHours": 8,
+  "tags": ["learning", "book-study", "communication", "career-plan"]
 }
