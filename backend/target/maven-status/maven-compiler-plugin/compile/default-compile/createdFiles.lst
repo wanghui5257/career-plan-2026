@@ -1,0 +1,17 @@
+com/career/plan/entity/ProgressReport.class
+com/career/plan/repository/TaskRepository.class
+com/career/plan/entity/User.class
+com/career/plan/service/UserService.class
+com/career/plan/repository/UserRepository.class
+com/career/plan/controller/TaskController.class
+com/career/plan/CareerPlanApplication.class
+com/career/plan/dto/LoginResponse.class
+com/career/plan/controller/AuthController.class
+com/career/plan/config/SecurityConfig.class
+com/career/plan/controller/HealthController.class
+com/career/plan/controller/DebugController.class
+com/career/plan/repository/ProgressReportRepository.class
+com/career/plan/dto/LoginRequest.class
+com/career/plan/controller/TestController.class
+com/career/plan/entity/Task.class
+com/career/plan/config/OpenApiConfig.class
