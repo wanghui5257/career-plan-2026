@@ -13,7 +13,7 @@
 ### 测试步骤
 ```bash
 TOKEN="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."  # 从登录响应获取
-curl -X GET https://plan.shujuyunxiang.com/api/v1/tasks \
+curl -X GET https://plan.shujuyunxiang.com/back-server/api/v1/tasks \
   -H "Authorization: Bearer $TOKEN"
 ```
 
@@ -45,13 +45,13 @@ curl -X GET https://plan.shujuyunxiang.com/api/v1/tasks \
 #### 步骤 1: 获取存在的任务详情
 ```bash
 TOKEN="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
-curl -X GET https://plan.shujuyunxiang.com/api/v1/tasks/1 \
+curl -X GET https://plan.shujuyunxiang.com/back-server/api/v1/tasks/1 \
   -H "Authorization: Bearer $TOKEN"
 ```
 
 #### 步骤 2: 获取不存在的任务详情
 ```bash
-curl -X GET https://plan.shujuyunxiang.com/api/v1/tasks/99999 \
+curl -X GET https://plan.shujuyunxiang.com/back-server/api/v1/tasks/99999 \
   -H "Authorization: Bearer $TOKEN"
 ```
 
@@ -84,7 +84,7 @@ curl -X GET https://plan.shujuyunxiang.com/api/v1/tasks/99999 \
 #### 步骤 1: 创建有效任务
 ```bash
 TOKEN="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
-curl -X POST https://plan.shujuyunxiang.com/api/v1/tasks \
+curl -X POST https://plan.shujuyunxiang.com/back-server/api/v1/tasks \
   -H "Authorization: Bearer $TOKEN" \
   -H "Content-Type: application/json" \
   -d '{
@@ -98,7 +98,7 @@ curl -X POST https://plan.shujuyunxiang.com/api/v1/tasks \
 
 #### 步骤 2: 创建空标题任务（验证失败）
 ```bash
-curl -X POST https://plan.shujuyunxiang.com/api/v1/tasks \
+curl -X POST https://plan.shujuyunxiang.com/back-server/api/v1/tasks \
   -H "Authorization: Bearer $TOKEN" \
   -H "Content-Type: application/json" \
   -d '{
@@ -135,7 +135,7 @@ curl -X POST https://plan.shujuyunxiang.com/api/v1/tasks \
 ### 测试步骤
 ```bash
 TOKEN="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
-curl -X PUT https://plan.shujuyunxiang.com/api/v1/tasks/1 \
+curl -X PUT https://plan.shujuyunxiang.com/back-server/api/v1/tasks/1 \
   -H "Authorization: Bearer $TOKEN" \
   -H "Content-Type: application/json" \
   -d '{
@@ -172,13 +172,13 @@ curl -X PUT https://plan.shujuyunxiang.com/api/v1/tasks/1 \
 #### 步骤 1: 删除存在的任务
 ```bash
 TOKEN="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
-curl -X DELETE https://plan.shujuyunxiang.com/api/v1/tasks/1 \
+curl -X DELETE https://plan.shujuyunxiang.com/back-server/api/v1/tasks/1 \
   -H "Authorization: Bearer $TOKEN"
 ```
 
 #### 步骤 2: 验证任务已删除
 ```bash
-curl -X GET https://plan.shujuyunxiang.com/api/v1/tasks/1 \
+curl -X GET https://plan.shujuyunxiang.com/back-server/api/v1/tasks/1 \
   -H "Authorization: Bearer $TOKEN"
 ```
 
@@ -210,7 +210,7 @@ curl -X GET https://plan.shujuyunxiang.com/api/v1/tasks/1 \
 ### 测试步骤
 ```bash
 TOKEN="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
-curl -X POST https://plan.shujuyunxiang.com/api/v1/tasks/1/progress \
+curl -X POST https://plan.shujuyunxiang.com/back-server/api/v1/tasks/1/progress \
   -H "Authorization: Bearer $TOKEN" \
   -H "Content-Type: application/json" \
   -d '{

@@ -14,35 +14,35 @@
 
 #### 步骤 1: 正确凭证登录
 ```bash
-curl -X POST https://plan.shujuyunxiang.com/api/v1/auth/login \
+curl -X POST https://plan.shujuyunxiang.com/back-server/api/v1/auth/login \
   -H "Content-Type: application/json" \
   -d '{"username":"admin","password":"admin123"}'
 ```
 
 #### 步骤 2: 错误密码登录
 ```bash
-curl -X POST https://plan.shujuyunxiang.com/api/v1/auth/login \
+curl -X POST https://plan.shujuyunxiang.com/back-server/api/v1/auth/login \
   -H "Content-Type: application/json" \
   -d '{"username":"admin","password":"wrongpassword"}'
 ```
 
 #### 步骤 3: 错误用户名登录
 ```bash
-curl -X POST https://plan.shujuyunxiang.com/api/v1/auth/login \
+curl -X POST https://plan.shujuyunxiang.com/back-server/api/v1/auth/login \
   -H "Content-Type: application/json" \
   -d '{"username":"nonexistent","password":"admin123"}'
 ```
 
 #### 步骤 4: 空用户名登录
 ```bash
-curl -X POST https://plan.shujuyunxiang.com/api/v1/auth/login \
+curl -X POST https://plan.shujuyunxiang.com/back-server/api/v1/auth/login \
   -H "Content-Type: application/json" \
   -d '{"username":"","password":"admin123"}'
 ```
 
 #### 步骤 5: 空密码登录
 ```bash
-curl -X POST https://plan.shujuyunxiang.com/api/v1/auth/login \
+curl -X POST https://plan.shujuyunxiang.com/back-server/api/v1/auth/login \
   -H "Content-Type: application/json" \
   -d '{"username":"admin","password":""}'
 ```
@@ -79,19 +79,19 @@ curl -X POST https://plan.shujuyunxiang.com/api/v1/auth/login \
 #### 步骤 1: 使用有效 Token 访问受保护接口
 ```bash
 TOKEN="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."  # 从登录响应获取
-curl -X GET https://plan.shujuyunxiang.com/api/v1/tasks \
+curl -X GET https://plan.shujuyunxiang.com/back-server/api/v1/tasks \
   -H "Authorization: Bearer $TOKEN"
 ```
 
 #### 步骤 2: 使用无效 Token 访问受保护接口
 ```bash
-curl -X GET https://plan.shujuyunxiang.com/api/v1/tasks \
+curl -X GET https://plan.shujuyunxiang.com/back-server/api/v1/tasks \
   -H "Authorization: Bearer invalid_token"
 ```
 
 #### 步骤 3: 无 Token 访问受保护接口
 ```bash
-curl -X GET https://plan.shujuyunxiang.com/api/v1/tasks
+curl -X GET https://plan.shujuyunxiang.com/back-server/api/v1/tasks
 ```
 
 ### 预期结果
@@ -120,7 +120,7 @@ curl -X GET https://plan.shujuyunxiang.com/api/v1/tasks
 
 ### 测试步骤
 ```bash
-curl -X GET https://plan.shujuyunxiang.com/actuator/health
+curl -X GET https://plan.shujuyunxiang.com/back-server/actuator/health
 ```
 
 ### 预期结果
