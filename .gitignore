@@ -1,23 +1,24 @@
-# Java
-target/
-*.class
-*.jar
-*.war
-
-# Node
-node_modules/
-dist/
-npm-debug.log
-
-# IDE
-.idea/
-.vscode/
-*.iml
-
 # Logs
+logs
 *.log
-logs/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
 
-# Config
-application-local.yml
-.env
+node_modules
+dist
+dist-ssr
+*.local
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?

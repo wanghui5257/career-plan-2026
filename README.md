@@ -1,53 +1,87 @@
-# 职业发展计划 2026 💼
-
-个人计划管理 Web 应用 - 助力职业转型 AI 领域
-
-## 项目目标
-
-- 📊 可视化任务管理
-- 📅 每日计划追踪
-- 📈 进度可视化
-- 🔄 反馈循环
+# 职业发展计划 2026 - 前端
 
 ## 技术栈
 
-### 前端
-- React / Vue (待定)
-- 任务板界面
-- 图表展示
-
-### 后端
-- Java 17
-- Spring Boot 3.x
-- Spring Security (JWT)
-- MySQL / PostgreSQL
-
-### 部署
-- 阿里云 ECS
-- Docker
-- Nginx
-
-## 团队
-
-- @alice - 前端开发
-- @backend-dev - 后端开发
-- @ai-collection - 资讯搜集
-- @career-advisor - 职业规划
-- @learning-coach - 学习教练
+- **React 18** - UI 框架
+- **TypeScript** - 类型安全
+- **Vite** - 构建工具
+- **Ant Design 5** - UI 组件库
+- **Recharts** - 图表库
 
 ## 快速开始
 
-```bash
-# 后端
-cd backend
-./mvnw spring-boot:run
+### 安装依赖
 
-# 前端
-cd frontend
+```bash
 npm install
+```
+
+### 开发模式
+
+```bash
 npm run dev
 ```
 
-## License
+访问 http://localhost:3000
 
-MIT
+### 构建生产版本
+
+```bash
+npm run build
+```
+
+### 预览构建结果
+
+```bash
+npm run preview
+```
+
+## 项目结构
+
+```
+frontend/
+├── src/
+│   ├── components/          # 可复用组件
+│   │   ├── TaskBoard.tsx    # 任务看板
+│   │   ├── TaskCard.tsx     # 任务卡片
+│   │   └── ProgressBar.tsx  # 进度条
+│   ├── pages/               # 页面组件
+│   │   └── Dashboard.tsx    # 主页面
+│   ├── types/               # TypeScript 类型定义
+│   │   └── task.ts          # 任务相关类型
+│   ├── styles/              # 全局样式
+│   │   └── index.css
+│   ├── App.tsx              # 应用根组件
+│   └── main.tsx             # 入口文件
+├── index.html
+├── package.json
+├── tsconfig.json
+└── vite.config.ts
+```
+
+## 功能特性
+
+- ✅ 任务看板（Kanban）- 拖拽任务切换状态
+- ✅ 任务卡片 - 显示任务详情、进度、优先级
+- ✅ 可编辑任务 - 点击编辑修改任务信息
+- ✅ 进度追踪 - 整体完成率和统计
+- ✅ 响应式设计 - 适配不同屏幕尺寸
+
+## 待开发功能
+
+- [ ] 日历视图
+- [ ] 团队成员管理
+- [ ] 任务筛选和搜索
+- [ ] 后端 API 集成
+- [ ] 用户认证
+
+## 开发规范
+
+- 使用 TypeScript 严格模式
+- 组件采用函数式 + Hooks
+- 样式使用 CSS + Ant Design 组件
+- 代码提交前运行 lint 检查
+
+## 协作说明
+
+本分支 `feature/alice-frontend` 由 @alice 开发，完成后将创建 Pull Request 合并到 main 分支。
