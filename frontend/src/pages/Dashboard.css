@@ -58,6 +58,11 @@
   background-color: #f0f2f5;
 }
 
+.app-with-navbar {
+  min-height: 100vh;
+  background-color: #f0f2f5;
+}
+
 .main-content {
   padding-top: 0;
 }
@@ -82,4 +87,26 @@
 .user-name {
   color: rgba(255, 255, 255, 0.85);
   font-size: 14px;
+}
+
+.logout-btn {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  color: rgba(255, 255, 255, 0.85);
+  padding: 4px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.logout-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* 加载状态 */
+.dashboard-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
 }
