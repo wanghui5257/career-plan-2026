@@ -122,6 +122,112 @@ curl -X POST http://47.115.63.159:9999/back-server/api/v1/tasks \
 
 ---
 
+
+### 2.5 计划接口 (Plans)
+
+| 方法 | 路径 | 描述 | 认证 |
+|------|------|------|------|
+| POST | `/api/v1/plans` | 创建新计划 | ✅ |
+| GET | `/api/v1/plans` | 获取计划列表 | ✅ |
+| GET | `/api/v1/plans/{id}` | 获取单个计划 | ✅ |
+| PUT | `/api/v1/plans/{id}` | 更新计划 | ✅ |
+| DELETE | `/api/v1/plans/{id}` | 删除计划 | ✅ |
+| POST | `/api/v1/plans/{id}/tasks` | 添加任务到计划 | ✅ |
+| POST | `/api/v1/plans/bulk` | 批量导入计划和任务 | ✅ |
+
+#### 计划数据结构
+
+```json
+{
+  "id": 1,
+  "tenantId": "tenant-001",
+  "userId": 1,
+  "title": "2026 年 AI 学习计划",
+  "description": "系统学习 AI 技术，转型 AI 工程师",
+  "goal": "掌握 Python、机器学习、深度学习，完成 3 个实战项目",
+  "startDate": "2026-01-01",
+  "endDate": "2026-12-31",
+  "status": "ACTIVE",  // DRAFT, ACTIVE, COMPLETED, ARCHIVED
+  "createdBy": 1,
+  "createdAt": "2026-03-17T10:00:00Z",
+  "updatedAt": "2026-03-17T10:00:00Z",
+  "tasks": [
+    {
+      "id": 1,
+      "title": "学习 Python 基础",
+      "status": "DONE",
+      "progress": 100
+    }
+  ]
+}
+```
+
+#### 创建计划示例
+
+```bash
+curl -X POST http://47.115.63.159:9999/back-server/api/v1/plans \
+  -H "Authorization: Bearer <token>" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "title": "2026 年 AI 学习计划",
+    "description": "系统学习 AI 技术",
+    "goal": "掌握机器学习、深度学习",
+    "startDate": "2026-01-01",
+    "endDate": "2026-12-31",
+    "status": "ACTIVE"
+  }'
+```
+
+#### 添加任务到计划示例
+
+```bash
+curl -X POST http://47.115.63.159:9999/back-server/api/v1/plans/1/tasks \
+  -H "Authorization: Bearer <token>" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "title": "学习 Python 基础",
+    "description": "完成 Python 入门教程",
+    "priority": "HIGH",
+    "dueDate": "2026-04-01",
+    "status": "TODO"
+  }'
+```
+
+#### 批量导入示例
+
+```bash
+curl -X POST http://47.115.63.159:9999/back-server/api/v1/plans/bulk \
+  -H "Authorization: Bearer <token>" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "title": "30 天沟通技巧提升计划",
+    "description": "学习《沟通的方法》书籍内容",
+    "goal": "掌握 10 个核心沟通技巧",
+    "startDate": "2026-03-13",
+    "endDate": "2026-04-11",
+    "tasks": [
+      {
+        "title": "阅读第 1 章",
+        "description": "沟通是一场无限游戏",
+        "priority": "MEDIUM"
+      },
+      {
+        "title": "阅读第 2 章",
+        "description": "倾听：听出弦外之音",
+        "priority": "MEDIUM"
+      }
+    ]
+  }'
+```
+
+#### 查询参数
+
+| 参数 | 类型 | 描述 |
+|------|------|------|
+| userId | Long | 按用户 ID 筛选 |
+| tenantId | String | 按租户 ID 筛选（多租户） |
+| status | String | 按计划状态筛选（DRAFT/ACTIVE/COMPLETED/ARCHIVED） |
+
 ### 3. 进度报告接口 (Progress Reports)
 
 | 方法 | 路径 | 描述 | 认证 |
