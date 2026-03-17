@@ -1,0 +1,85 @@
+.dashboard {
+  padding: 24px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* 快速操作区 */
+.quick-actions {
+  margin-bottom: 24px;
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.quick-actions .ant-btn {
+  height: 48px;
+  font-size: 16px;
+}
+
+/* 统计卡片行 */
+.stats-row {
+  margin-bottom: 24px;
+}
+
+.stats-card {
+  text-align: center;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.stats-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.stats-card .ant-statistic-title {
+  font-size: 14px;
+  color: rgba(0, 0, 0, 0.65);
+}
+
+.stats-card .ant-statistic-content {
+  font-size: 24px;
+  font-weight: 600;
+}
+
+/* 区块卡片 */
+.section-card {
+  margin-bottom: 24px;
+}
+
+.section-card .ant-card-head {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+/* 应用容器 */
+.app-container {
+  min-height: 100vh;
+  background-color: #f0f2f5;
+}
+
+.main-content {
+  padding-top: 0;
+}
+
+/* 页面占位符 */
+.page-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  font-size: 18px;
+  color: rgba(0, 0, 0, 0.45);
+}
+
+/* 导航用户区域 */
+.nav-user {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.user-name {
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 14px;
+}
