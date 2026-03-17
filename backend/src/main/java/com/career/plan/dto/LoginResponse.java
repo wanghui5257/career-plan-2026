@@ -12,4 +12,14 @@ public class LoginResponse {
     private String message;
     private String token;
     private long expiresIn;
+    private String[] roles;  // 用户角色列表
+    
+    // 兼容旧版本的构造函数
+    public LoginResponse(int code, String message, String token, long expiresIn) {
+        this.code = code;
+        this.message = message;
+        this.token = token;
+        this.expiresIn = expiresIn;
+        this.roles = new String[]{};
+    }
 }
