@@ -6,23 +6,17 @@ import java.time.LocalDateTime;
 
 @Data
 @Entity
-@Table(name = "users")
-public class User {
+@Table(name = "permissions")
+public class Permission {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
-    @Column(unique = true, nullable = false)
-    private String username;
+    @Column(unique = true, nullable = false, length = 100)
+    private String name;  // PLAN_CREATE, PLAN_VIEW, PLAN_UPDATE, PLAN_DELETE, etc.
     
-    @Column(nullable = false)
-    private String password;
-    
-    private String email;
-    
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "role_id")
-    private Role role;
+    @Column(length = 255)
+    private String description;
     
     @Column(name = "created_at")
     private LocalDateTime createdAt;

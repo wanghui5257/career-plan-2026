@@ -6,23 +6,29 @@ import java.time.LocalDateTime;
 
 @Data
 @Entity
-@Table(name = "users")
-public class User {
+@Table(name = "progress_tracking")
+public class Progress {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
-    @Column(unique = true, nullable = false)
-    private String username;
+    @Column(name = "plan_id", nullable = false)
+    private Long planId;
     
-    @Column(nullable = false)
-    private String password;
+    @Column(name = "progress_percentage")
+    private Integer progressPercentage;  // 0-100
     
-    private String email;
+    @Column(name = "completed_tasks")
+    private Integer completedTasks;
     
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "role_id")
-    private Role role;
+    @Column(name = "total_tasks")
+    private Integer totalTasks;
+    
+    @Column(name = "pending_tasks")
+    private Integer pendingTasks;
+    
+    @Column(name = "in_progress_tasks")
+    private Integer inProgressTasks;
     
     @Column(name = "created_at")
     private LocalDateTime createdAt;

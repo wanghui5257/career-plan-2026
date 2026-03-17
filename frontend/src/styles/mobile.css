@@ -1,0 +1,298 @@
+/* 移动端专用样式（< 768px） */
+
+/* 触摸优化 */
+* {
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+input,
+textarea,
+select {
+  -webkit-user-select: auto;
+  user-select: auto;
+}
+
+/* 防止双击缩放 */
+meta[name="viewport"] {
+  content: "width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no";
+}
+
+/* 移动端布局优化 */
+body {
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: env(safe-area-inset-bottom);
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
+}
+
+/* 安全区域适配（iPhone X+） */
+.safe-area-top {
+  padding-top: env(safe-area-inset-top);
+}
+
+.safe-area-bottom {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+/* 移动端字体优化 */
+p {
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+h1 {
+  font-size: 24px;
+}
+
+h2 {
+  font-size: 20px;
+}
+
+h3 {
+  font-size: 18px;
+}
+
+h4 {
+  font-size: 16px;
+}
+
+/* 移动端间距优化 */
+.container {
+  padding-left: 16px;
+  padding-right: 16px;
+}
+
+/* 移动端列表优化 */
+ul,
+ol {
+  padding-left: 20px;
+}
+
+li {
+  margin-bottom: 8px;
+}
+
+/* 移动端链接优化 */
+a {
+  color: #667eea;
+  text-decoration: none;
+  padding: 8px 0; /* 增加点击区域 */
+}
+
+/* 移动端输入框优化 */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+input[type="tel"],
+textarea {
+  font-size: 16px; /* 防止 iOS 自动缩放 */
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+/* 移动端按钮优化 */
+button,
+.btn {
+  -webkit-appearance: none;
+  appearance: none;
+  touch-action: manipulation; /* 优化触摸响应 */
+}
+
+/* 移动端表格优化 */
+table {
+  font-size: 14px;
+}
+
+/* 移动端图片优化 */
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* 移动端视频优化 */
+video {
+  max-width: 100%;
+  height: auto;
+}
+
+/* 移动端导航优化 */
+nav {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+/* 移动端卡片优化 */
+.card {
+  margin-bottom: 12px;
+  border-radius: 12px;
+}
+
+/* 移动端加载状态优化 */
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+}
+
+.loading-spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid #f0f0f0;
+  border-top-color: #667eea;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* 移动端下拉刷新指示器 */
+.pull-to-refresh {
+  text-align: center;
+  padding: 20px;
+  color: #999;
+}
+
+/* 移动端底部导航 */
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #fff;
+  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: space-around;
+  padding: 8px 0;
+  padding-bottom: calc(8px + env(safe-area-inset-bottom));
+  z-index: 1000;
+}
+
+.bottom-nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 8px 16px;
+  color: #999;
+  font-size: 12px;
+  min-width: 44px; /* 触摸目标 */
+  min-height: 44px;
+  justify-content: center;
+}
+
+.bottom-nav-item.active {
+  color: #667eea;
+}
+
+.bottom-nav-item-icon {
+  font-size: 20px;
+}
+
+/* 移动端浮动操作按钮 */
+.fab {
+  position: fixed;
+  bottom: calc(80px + env(safe-area-inset-bottom));
+  right: 20px;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: #fff;
+  border: none;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  cursor: pointer;
+  z-index: 999;
+  touch-action: manipulation;
+}
+
+/* 移动端模态框优化 */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: flex-end; /* 从底部弹出 */
+  z-index: 2000;
+}
+
+.modal-content {
+  background: #fff;
+  border-radius: 16px 16px 0 0;
+  padding: 24px 20px;
+  max-height: 80vh;
+  overflow-y: auto;
+  width: 100%;
+  animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+/* 移动端 Toast 提示 */
+.toast {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(0, 0, 0, 0.8);
+  color: #fff;
+  padding: 16px 24px;
+  border-radius: 8px;
+  font-size: 14px;
+  z-index: 3000;
+  max-width: 80%;
+  text-align: center;
+}
+
+/* 移动端骨架屏 */
+.skeleton {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 4px;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* 移动端滚动优化 */
+.scrollable {
+  -webkit-overflow-scrolling: touch;
+}
+
+/* 移动端禁用滚动 */
+.no-scroll {
+  overflow: hidden;
+  position: fixed;
+  width: 100%;
+}
