@@ -65,7 +65,26 @@ public class UserService {
     private String generateToken(User user) {
         Map<String, Object> claims = new HashMap<>();
         claims.put("username", user.getUsername());
-        claims.put("role", user.getRole());
+        claims.put("userId", user.getId());
+        
+        // 添加角色信息到 Token
+        if (user.getRole() != null) {
+            claims.put("role", user.getRole().getName());
+            claims.put("roleName", user.getRole().getName());
+            claims.put("roleId", user.getRole().getId());
+            
+            // 添加角色权限列表
+            if (user.getRole().getPermissions() != null) {
+                java.util.List<String> permissions = user.getRole().getPermissions().stream()
+                    .map(permission -> permission.getName())
+                    .collect(java.util.stream.Collectors.toList());
+                claims.put("permissions", permissions);
+            }
+        } else {
+            // 兼容旧的 role 字符串字段
+            claims.put("role", user.getRole() != null ? user.getRole() : "EXECUTOR");
+            claims.put("roleName", user.getRole() != null ? user.getRole() : "EXECUTOR");
+        }
 
         return Jwts.builder()
             .setClaims(claims)

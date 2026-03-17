@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import jakarta.validation.Valid;
 import java.util.HashMap;
@@ -25,6 +26,7 @@ public class PlanController {
     private PlanService planService;
     
     @PostMapping
+    @PreAuthorize("hasAnyAuthority('PLAN_CREATE', 'ADMIN')")
     @Operation(summary = "创建计划", description = "创建新的职业发展计划")
     public ResponseEntity<?> createPlan(@Valid @RequestBody PlanDTO.CreatePlanRequest request,
                                         @RequestHeader(value = "X-User-Id", required = false) Long userId,
@@ -41,6 +43,7 @@ public class PlanController {
     }
     
     @GetMapping
+    @PreAuthorize("hasAnyAuthority('PLAN_VIEW', 'ADMIN')")
     @Operation(summary = "获取计划列表", description = "获取计划列表，支持分页和筛选")
     public ResponseEntity<?> getPlans(@RequestParam(required = false) Long userId,
                                       @RequestParam(required = false) String tenantId,
@@ -60,6 +63,7 @@ public class PlanController {
     }
     
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('PLAN_VIEW', 'ADMIN')")
     @Operation(summary = "获取单个计划", description = "根据 ID 获取计划详情")
     public ResponseEntity<?> getPlan(@PathVariable Long id) {
         try {
@@ -77,6 +81,7 @@ public class PlanController {
     }
     
     @PutMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('PLAN_UPDATE', 'PLAN_CREATE', 'ADMIN')")
     @Operation(summary = "更新计划", description = "更新现有计划")
     public ResponseEntity<?> updatePlan(@PathVariable Long id,
                                         @Valid @RequestBody PlanDTO.UpdatePlanRequest request) {
@@ -92,6 +97,7 @@ public class PlanController {
     }
     
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('PLAN_DELETE', 'ADMIN')")
     @Operation(summary = "删除计划", description = "根据 ID 删除计划")
     public ResponseEntity<?> deletePlan(@PathVariable Long id) {
         try {
@@ -109,6 +115,7 @@ public class PlanController {
     }
     
     @PostMapping("/{id}/tasks")
+    @PreAuthorize("hasAnyAuthority('TASK_CREATE', 'PLAN_CREATE', 'ADMIN')")
     @Operation(summary = "添加任务到计划", description = "向指定计划添加新任务")
     public ResponseEntity<?> addTaskToPlan(@PathVariable Long id,
                                            @Valid @RequestBody PlanDTO.AddTaskRequest request,
@@ -132,6 +139,7 @@ public class PlanController {
     }
     
     @PostMapping("/bulk")
+    @PreAuthorize("hasAnyAuthority('PLAN_CREATE', 'TASK_CREATE', 'ADMIN')")
     @Operation(summary = "批量导入计划和任务", description = "一次性创建计划并添加多个任务")
     public ResponseEntity<?> bulkImport(@Valid @RequestBody PlanDTO.BulkImportRequest request,
                                         @RequestHeader(value = "X-User-Id", required = false) Long userId,
