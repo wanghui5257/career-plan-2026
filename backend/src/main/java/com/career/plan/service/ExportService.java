@@ -5,19 +5,26 @@ import com.career.plan.entity.Plan;
 import com.career.plan.entity.Task;
 import com.career.plan.repository.PlanRepository;
 import com.career.plan.repository.TaskRepository;
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import java.io.*;
-import java.nio.file.*;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
-@Transactional
 public class ExportService {
     
     @Autowired
@@ -26,238 +33,291 @@ public class ExportService {
     @Autowired
     private TaskRepository taskRepository;
     
-    private static final String EXPORT_DIR = "/tmp/career-plan-exports";
-    private static final long EXPIRY_HOURS = 168; // 7 天
+    public static final String EXPORT_DIR = "/tmp/career-plan-exports";
+    private static final long EXPIRY_HOURS = 168;  // 7 days
     
     /**
      * 导出计划为指定格式
      */
+    @Transactional(readOnly = true)
     public ExportDTO.ExportResponse exportPlan(Long planId, String format) throws IOException {
         Plan plan = planRepository.findById(planId)
-            .orElseThrow(() -> new RuntimeException("计划不存在：" + planId));
+            .orElseThrow(() -> new RuntimeException("计划不存在"));
         
-        List<Task> tasks = taskRepository.findAll();
+        List<Task> tasks = taskRepository.findByPlanId(planId);
         
-        // 生成导出数据
-        ExportDTO.PlanExportData data = new ExportDTO.PlanExportData();
-        data.setPlanId(plan.getId());
-        data.setPlanName(plan.getTitle());
-        data.setDescription(plan.getDescription());
-        data.setProgress(0);
-        data.setCreatedAt(plan.getCreatedAt());
+        // 创建导出目录
+        File exportDir = new File(EXPORT_DIR);
+        if (!exportDir.exists()) {
+            exportDir.mkdirs();
+        }
         
-        List<ExportDTO.TaskExportData> taskDataList = tasks.stream().map(task -> {
-            ExportDTO.TaskExportData taskData = new ExportDTO.TaskExportData();
-            taskData.setTaskId(task.getId());
-            taskData.setTitle(task.getTitle());
-            taskData.setDescription(task.getDescription());
-            taskData.setStatus(task.getStatus());
-            taskData.setPriority(task.getPriority());
-            taskData.setProgress(task.getProgress());
-            taskData.setAssignee(task.getAssignedTo());
-            taskData.setDueDate(task.getDueDate());
-            return taskData;
-        }).collect(Collectors.toList());
-        data.setTasks(taskDataList);
+        // 生成文件名
+        String fileId = UUID.randomUUID().toString().substring(0, 8);
+        String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss"));
+        String fileName = String.format("plan_%d_%s.%s", planId, timestamp, format.toLowerCase());
+        String filePath = EXPORT_DIR + "/" + fileName;
         
-        // 生成文件
-        String fileId = UUID.randomUUID().toString();
-        String fileName = "plan_" + planId + "_" + System.currentTimeMillis() + "." + format.toLowerCase();
-        Path filePath = Paths.get(EXPORT_DIR, fileName);
-        
-        // 确保导出目录存在
-        Files.createDirectories(Paths.get(EXPORT_DIR));
-        
-        // 根据格式写入文件
+        // 根据格式导出
         switch (format.toUpperCase()) {
             case "CSV":
-                writeCsv(data, filePath);
+                exportToCsv(plan, tasks, filePath);
                 break;
             case "EXCEL":
-                writeExcel(data, filePath);
+                exportToExcel(plan, tasks, filePath);
                 break;
             case "JSON":
-                writeJson(data, filePath);
+                exportToJson(plan, tasks, filePath);
                 break;
             default:
-                writeJson(data, filePath); // 默认 JSON
+                throw new IllegalArgumentException("不支持的导出格式：" + format);
         }
         
-        // 生成响应
-        ExportDTO.ExportResponse response = new ExportDTO.ExportResponse();
-        response.setFileId(fileId);
-        response.setFileName(fileName);
-        response.setFormat(format.toUpperCase());
-        response.setFileSize(Files.size(filePath));
-        response.setDownloadUrl("/api/v1/export/" + fileId);
-        response.setGeneratedAt(LocalDateTime.now());
-        response.setExpiresAt(LocalDateTime.now().plusHours(EXPIRY_HOURS));
+        LocalDateTime generatedAt = LocalDateTime.now();
+        LocalDateTime expiresAt = generatedAt.plusHours(EXPIRY_HOURS);
         
-        return response;
+        return new ExportDTO.ExportResponse(
+            fileId,
+            fileName,
+            format.toUpperCase(),
+            planId,
+            plan.getTitle(),
+            generatedAt,
+            expiresAt,
+            "/api/v1/export/" + fileId
+        );
     }
     
     /**
-     * 写入 CSV 文件
+     * 导出为 CSV
      */
-    private void writeCsv(ExportDTO.PlanExportData data, Path filePath) throws IOException {
-        StringBuilder csv = new StringBuilder();
-        
-        // 计划信息
-        csv.append("计划 ID, 计划名称，描述，创建时间\n");
-        csv.append(data.getPlanId()).append(",")
-           .append(data.getPlanName()).append(",")
-           .append(data.getDescription()).append(",")
-           .append(data.getCreatedAt()).append("\n\n");
-        
-        // 任务列表
-        csv.append("任务 ID，任务标题，描述，状态，优先级，进度，负责人，截止日期\n");
-        for (ExportDTO.TaskExportData task : data.getTasks()) {
-            csv.append(task.getTaskId()).append(",")
-               .append(task.getTitle()).append(",")
-               .append(task.getDescription()).append(",")
-               .append(task.getStatus()).append(",")
-               .append(task.getPriority()).append(",")
-               .append(task.getProgress()).append(",")
-               .append(task.getAssignee()).append(",")
-               .append(task.getDueDate()).append("\n");
-        }
-        
-        Files.write(filePath, csv.toString().getBytes());
-    }
-    
-    /**
-     * 写入 Excel 文件（简化版，实际应使用 Apache POI）
-     */
-    private void writeExcel(ExportDTO.PlanExportData data, Path filePath) throws IOException {
-        // 简化实现：生成 CSV 但使用.xlsx 扩展名
-        // 生产环境应使用 Apache POI 库
-        writeCsv(data, filePath);
-    }
-    
-    /**
-     * 写入 JSON 文件
-     */
-    private void writeJson(ExportDTO.PlanExportData data, Path filePath) throws IOException {
-        StringBuilder json = new StringBuilder();
-        json.append("{\n");
-        json.append("  \"planId\": ").append(data.getPlanId()).append(",\n");
-        json.append("  \"planName\": \"").append(data.getPlanName()).append("\",\n");
-        json.append("  \"description\": \"").append(data.getDescription()).append("\",\n");
-        json.append("  \"createdAt\": \"").append(data.getCreatedAt()).append("\",\n");
-        json.append("  \"tasks\": [\n");
-        
-        for (int i = 0; i < data.getTasks().size(); i++) {
-            ExportDTO.TaskExportData task = data.getTasks().get(i);
-            json.append("    {\n");
-            json.append("      \"taskId\": ").append(task.getTaskId()).append(",\n");
-            json.append("      \"title\": \"").append(task.getTitle()).append("\",\n");
-            json.append("      \"status\": \"").append(task.getStatus()).append("\",\n");
-            json.append("      \"priority\": \"").append(task.getPriority()).append("\",\n");
-            json.append("      \"progress\": ").append(task.getProgress()).append("\n");
-            json.append("    }");
-            if (i < data.getTasks().size() - 1) {
-                json.append(",");
+    private void exportToCsv(Plan plan, List<Task> tasks, String filePath) throws IOException {
+        try (FileWriter writer = new FileWriter(filePath)) {
+            // 计划信息
+            writer.append("=== 计划信息 ===\n");
+            writer.append("计划 ID,").append(plan.getId().toString()).append("\n");
+            writer.append("计划名称,").append(plan.getTitle()).append("\n");
+            writer.append("计划描述,").append(plan.getDescription() != null ? plan.getDescription() : "").append("\n");
+            writer.append("开始日期,").append(plan.getStartDate() != null ? plan.getStartDate().toString() : "").append("\n");
+            writer.append("结束日期,").append(plan.getEndDate() != null ? plan.getEndDate().toString() : "").append("\n");
+            writer.append("\n");
+            
+            // 任务列表
+            writer.append("=== 任务列表 ===\n");
+            writer.append("任务 ID，标题，描述，状态，优先级，截止日期\n");
+            for (Task task : tasks) {
+                writer.append(task.getId().toString()).append(",");
+                writer.append(task.getTitle()).append(",");
+                writer.append(task.getDescription() != null ? task.getDescription() : "").append(",");
+                writer.append(task.getStatus() != null ? task.getStatus() : "").append(",");
+                writer.append(task.getPriority() != null ? task.getPriority() : "").append(",");
+                writer.append(task.getDueDate() != null ? task.getDueDate().toString() : "").append("\n");
             }
-            json.append("\n");
         }
+    }
+    
+    /**
+     * 导出为 Excel
+     */
+    private void exportToExcel(Plan plan, List<Task> tasks, String filePath) throws IOException {
+        try (Workbook workbook = new XSSFWorkbook()) {
+            // 计划信息 Sheet
+            Sheet planSheet = workbook.createSheet("计划信息");
+            Row headerRow = planSheet.createRow(0);
+            headerRow.createCell(0).setCellValue("属性");
+            headerRow.createCell(1).setCellValue("值");
+            
+            int rowNum = 1;
+            planSheet.createRow(rowNum++).createCell(0).setCellValue("计划 ID");
+            planSheet.getRow(rowNum - 1).createCell(1).setCellValue(plan.getId());
+            
+            planSheet.createRow(rowNum++).createCell(0).setCellValue("计划名称");
+            planSheet.getRow(rowNum - 1).createCell(1).setCellValue(plan.getTitle());
+            
+            if (plan.getDescription() != null) {
+                planSheet.createRow(rowNum++).createCell(0).setCellValue("计划描述");
+                planSheet.getRow(rowNum - 1).createCell(1).setCellValue(plan.getDescription());
+            }
+            
+            if (plan.getStartDate() != null) {
+                planSheet.createRow(rowNum++).createCell(0).setCellValue("开始日期");
+                planSheet.getRow(rowNum - 1).createCell(1).setCellValue(plan.getStartDate().toString());
+            }
+            
+            if (plan.getEndDate() != null) {
+                planSheet.createRow(rowNum++).createCell(0).setCellValue("结束日期");
+                planSheet.getRow(rowNum - 1).createCell(1).setCellValue(plan.getEndDate().toString());
+            }
+            
+            // 任务列表 Sheet
+            Sheet taskSheet = workbook.createSheet("任务列表");
+            Row taskHeader = taskSheet.createRow(0);
+            taskHeader.createCell(0).setCellValue("任务 ID");
+            taskHeader.createCell(1).setCellValue("标题");
+            taskHeader.createCell(2).setCellValue("描述");
+            taskHeader.createCell(3).setCellValue("状态");
+            taskHeader.createCell(4).setCellValue("优先级");
+            taskHeader.createCell(5).setCellValue("截止日期");
+            
+            int taskRowNum = 1;
+            for (Task task : tasks) {
+                Row row = taskSheet.createRow(taskRowNum++);
+                row.createCell(0).setCellValue(task.getId());
+                row.createCell(1).setCellValue(task.getTitle());
+                row.createCell(2).setCellValue(task.getDescription() != null ? task.getDescription() : "");
+                row.createCell(3).setCellValue(task.getStatus() != null ? task.getStatus() : "");
+                row.createCell(4).setCellValue(task.getPriority() != null ? task.getPriority() : "");
+                row.createCell(5).setCellValue(task.getDueDate() != null ? task.getDueDate().toString() : "");
+            }
+            
+            // 自动调整列宽
+            for (int i = 0; i < 6; i++) {
+                taskSheet.autoSizeColumn(i);
+            }
+            
+            try (FileOutputStream fos = new FileOutputStream(filePath)) {
+                workbook.write(fos);
+            }
+        }
+    }
+    
+    /**
+     * 导出为 JSON
+     */
+    private void exportToJson(Plan plan, List<Task> tasks, String filePath) throws IOException {
+        List<ExportDTO.TaskData> taskDataList = tasks.stream()
+            .map(task -> new ExportDTO.TaskData(
+                task.getId(),
+                task.getTitle(),
+                task.getDescription(),
+                task.getStatus(),
+                task.getPriority(),
+                task.getDueDate()
+            ))
+            .collect(Collectors.toList());
         
-        json.append("  ]\n");
-        json.append("}\n");
+        int completedTasks = (int) tasks.stream()
+            .filter(task -> "DONE".equals(task.getStatus()) || "COMPLETED".equals(task.getStatus()))
+            .count();
         
-        Files.write(filePath, json.toString().getBytes());
+        ExportDTO.ProgressData progressData = new ExportDTO.ProgressData(
+            tasks.size() > 0 ? (double) completedTasks / tasks.size() * 100 : 0.0,
+            completedTasks,
+            tasks.size()
+        );
+        
+        ExportDTO.ExportData exportData = new ExportDTO.ExportData(
+            plan.getId(),
+            plan.getTitle(),
+            plan.getDescription(),
+            plan.getStartDate(),
+            plan.getEndDate(),
+            taskDataList,
+            progressData
+        );
+        
+        // 简单的 JSON 序列化（实际项目中建议使用 Jackson）
+        String json = "{\n" +
+            "  \"planId\": " + plan.getId() + ",\n" +
+            "  \"planName\": \"" + escapeJson(plan.getTitle()) + "\",\n" +
+            "  \"planDescription\": \"" + escapeJson(plan.getDescription() != null ? plan.getDescription() : "") + "\",\n" +
+            "  \"startDate\": \"" + (plan.getStartDate() != null ? plan.getStartDate().toString() : "") + "\",\n" +
+            "  \"endDate\": \"" + (plan.getEndDate() != null ? plan.getEndDate().toString() : "") + "\",\n" +
+            "  \"tasks\": " + taskDataListToJson(taskDataList) + ",\n" +
+            "  \"progress\": {\n" +
+            "    \"progressPercentage\": " + progressData.getProgressPercentage() + ",\n" +
+            "    \"completedTasks\": " + progressData.getCompletedTasks() + ",\n" +
+            "    \"totalTasks\": " + progressData.getTotalTasks() + "\n" +
+            "  }\n" +
+            "}";
+        
+        try (FileWriter writer = new FileWriter(filePath)) {
+            writer.write(json);
+        }
+    }
+    
+    private String escapeJson(String value) {
+        if (value == null) return "";
+        return value.replace("\\", "\\\\")
+            .replace("\"", "\\\"")
+            .replace("\n", "\\n")
+            .replace("\r", "\\r")
+            .replace("\t", "\\t");
+    }
+    
+    private String taskDataListToJson(List<ExportDTO.TaskData> tasks) {
+        StringBuilder sb = new StringBuilder("[\n");
+        for (int i = 0; i < tasks.size(); i++) {
+            ExportDTO.TaskData task = tasks.get(i);
+            sb.append("    {\n");
+            sb.append("      \"taskId\": ").append(task.getTaskId()).append(",\n");
+            sb.append("      \"title\": \"").append(escapeJson(task.getTitle())).append("\",\n");
+            sb.append("      \"description\": \"").append(escapeJson(task.getDescription() != null ? task.getDescription() : "")).append("\",\n");
+            sb.append("      \"status\": \"").append(escapeJson(task.getStatus() != null ? task.getStatus() : "")).append("\",\n");
+            sb.append("      \"priority\": \"").append(escapeJson(task.getPriority() != null ? task.getPriority() : "")).append("\",\n");
+            sb.append("      \"dueDate\": \"").append(task.getDueDate() != null ? task.getDueDate().toString() : "").append("\"\n");
+            sb.append("    }");
+            if (i < tasks.size() - 1) sb.append(",");
+            sb.append("\n");
+        }
+        sb.append("  ]");
+        return sb.toString();
     }
     
     /**
      * 获取导出文件
      */
-    public Path getExportFile(String fileId) throws IOException {
-        // 简单实现：查找匹配的文件
-        try (DirectoryStream<Path> stream = Files.newDirectoryStream(Paths.get(EXPORT_DIR))) {
-            for (Path file : stream) {
-                if (file.getFileName().toString().contains(fileId)) {
-                    return file;
-                }
-            }
-        }
-        throw new FileNotFoundException("导出文件不存在：" + fileId);
-    }
-    
-    /**
-     * 获取导出历史
-     */
-    @Transactional(readOnly = true)
-    public List<ExportDTO.ExportHistoryItem> getExportHistory() {
-        List<ExportDTO.ExportHistoryItem> history = new ArrayList<>();
-        LocalDateTime now = LocalDateTime.now();
-        
-        try (DirectoryStream<Path> stream = Files.newDirectoryStream(Paths.get(EXPORT_DIR))) {
-            for (Path file : stream) {
-                try {
-                    ExportDTO.ExportHistoryItem item = new ExportDTO.ExportHistoryItem();
-                    item.setFileId(file.getFileName().toString());
-                    item.setFileName(file.getFileName().toString());
-                    item.setFormat(file.getFileName().toString().substring(file.getFileName().toString().lastIndexOf('.') + 1).toUpperCase());
-                    item.setFileSize(Files.size(file));
-                    item.setGeneratedAt(LocalDateTime.ofInstant(Files.getLastModifiedTime(file).toInstant(), java.time.ZoneId.systemDefault()));
-                    item.setExpiresAt(item.getGeneratedAt().plusHours(EXPIRY_HOURS));
-                    item.setStatus(now.isAfter(item.getExpiresAt()) ? "EXPIRED" : "READY");
-                    history.add(item);
-                } catch (Exception e) {
-                    // 忽略错误
-                }
-            }
-        } catch (IOException e) {
-            // 忽略错误
+    public File getExportFile(String fileId) {
+        File exportDir = new File(EXPORT_DIR);
+        if (!exportDir.exists()) {
+            return null;
         }
         
-        return history;
+        // 查找匹配的文件
+        File[] files = exportDir.listFiles((dir, name) -> name.contains(fileId));
+        if (files != null && files.length > 0) {
+            return files[0];
+        }
+        return null;
     }
     
     /**
      * 删除导出文件
      */
     public boolean deleteExportFile(String fileId) {
-        try (DirectoryStream<Path> stream = Files.newDirectoryStream(Paths.get(EXPORT_DIR))) {
-            for (Path file : stream) {
-                if (file.getFileName().toString().contains(fileId)) {
-                    Files.delete(file);
-                    return true;
-                }
-            }
-        } catch (IOException e) {
-            // 忽略错误
+        File file = getExportFile(fileId);
+        if (file != null && file.exists()) {
+            return file.delete();
         }
         return false;
     }
     
     /**
-     * 定时清理：每天清理过期的导出文件
+     * 清理过期导出文件
      */
-    @Scheduled(cron = "0 0 2 * * ?") // 每天凌晨 2 点执行
-    public void cleanupExpiredExports() {
-        LocalDateTime now = LocalDateTime.now();
-        int deletedCount = 0;
-        
-        try (DirectoryStream<Path> stream = Files.newDirectoryStream(Paths.get(EXPORT_DIR))) {
-            for (Path file : stream) {
-                try {
-                    LocalDateTime generatedAt = LocalDateTime.ofInstant(
-                        Files.getLastModifiedTime(file).toInstant(), 
-                        java.time.ZoneId.systemDefault()
-                    );
-                    
-                    if (now.isAfter(generatedAt.plusHours(EXPIRY_HOURS))) {
-                        Files.delete(file);
-                        deletedCount++;
-                    }
-                } catch (Exception e) {
-                    // 忽略错误
-                }
-            }
-        } catch (IOException e) {
-            // 忽略错误
+    @Transactional
+    public int cleanupExpiredExports() {
+        File exportDir = new File(EXPORT_DIR);
+        if (!exportDir.exists()) {
+            return 0;
         }
         
-        System.out.println("清理导出文件完成，删除 " + deletedCount + " 个过期文件");
+        int deletedCount = 0;
+        LocalDateTime now = LocalDateTime.now();
+        File[] files = exportDir.listFiles();
+        
+        if (files != null) {
+            for (File file : files) {
+                // 简单判断：文件修改时间超过 7 天
+                long fileAge = now.toEpochSecond() - file.lastModified() / 1000;
+                if (fileAge > EXPIRY_HOURS * 3600) {
+                    if (file.delete()) {
+                        deletedCount++;
+                    }
+                }
+            }
+        }
+        
+        return deletedCount;
     }
 }

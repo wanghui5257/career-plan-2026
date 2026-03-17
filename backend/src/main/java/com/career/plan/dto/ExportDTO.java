@@ -1,75 +1,92 @@
 package com.career.plan.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Data
 public class ExportDTO {
     
     /**
      * 导出请求
      */
     @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
     public static class ExportRequest {
         private String format;  // CSV, EXCEL, JSON
-        private Long planId;
-        private Long taskId;
+        private boolean includeTasks;
+        private boolean includeProgress;
     }
     
     /**
      * 导出响应
      */
     @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
     public static class ExportResponse {
         private String fileId;
         private String fileName;
         private String format;
-        private Long fileSize;
-        private String downloadUrl;
-        private LocalDateTime generatedAt;
-        private LocalDateTime expiresAt;
-    }
-    
-    /**
-     * 计划导出数据
-     */
-    @Data
-    public static class PlanExportData {
         private Long planId;
         private String planName;
-        private String description;
-        private Integer progress;
-        private LocalDateTime createdAt;
-        private List<TaskExportData> tasks;
+        private LocalDateTime generatedAt;
+        private LocalDateTime expiresAt;
+        private String downloadUrl;
     }
     
     /**
-     * 任务导出数据
+     * 导出历史项
      */
     @Data
-    public static class TaskExportData {
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class ExportHistoryItem {
+        private String fileId;
+        private String fileName;
+        private String format;
+        private Long planId;
+        private LocalDateTime generatedAt;
+        private LocalDateTime expiresAt;
+        private Boolean isExpired;
+    }
+    
+    /**
+     * 导出数据（JSON 格式）
+     */
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class ExportData {
+        private Long planId;
+        private String planName;
+        private String planDescription;
+        private LocalDateTime startDate;
+        private LocalDateTime endDate;
+        private List<TaskData> tasks;
+        private ProgressData progress;
+    }
+    
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class TaskData {
         private Long taskId;
         private String title;
         private String description;
         private String status;
         private String priority;
-        private Integer progress;
-        private String assignee;
         private LocalDateTime dueDate;
     }
     
-    /**
-     * 导出历史记录
-     */
     @Data
-    public static class ExportHistoryItem {
-        private String fileId;
-        private String fileName;
-        private String format;
-        private Long fileSize;
-        private LocalDateTime generatedAt;
-        private LocalDateTime expiresAt;
-        private String status;  // READY, EXPIRED, DELETED
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class ProgressData {
+        private Double progressPercentage;
+        private Integer completedTasks;
+        private Integer totalTasks;
     }
 }

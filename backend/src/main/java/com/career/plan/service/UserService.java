@@ -59,31 +59,21 @@ public class UserService {
         String token = generateToken(user);
         log.info("Token 生成成功");
         
-        return new LoginResponse(200, "登录成功", token, jwtExpiration);
+        // 提取用户角色
+        String[] roles = new String[]{};
+        if (user.getRole() != null) {
+            roles = new String[]{user.getRole().getName()};
+        }
+        
+        return new LoginResponse(200, "登录成功", token, jwtExpiration, roles);
     }
 
     private String generateToken(User user) {
         Map<String, Object> claims = new HashMap<>();
         claims.put("username", user.getUsername());
-        claims.put("userId", user.getId());
-        
-        // 添加角色信息到 Token
+        // 添加 roles 字段（包含角色名称列表）
         if (user.getRole() != null) {
-            claims.put("role", user.getRole().getName());
-            claims.put("roleName", user.getRole().getName());
-            claims.put("roleId", user.getRole().getId());
-            
-            // 添加角色权限列表
-            if (user.getRole().getPermissions() != null) {
-                java.util.List<String> permissions = user.getRole().getPermissions().stream()
-                    .map(permission -> permission.getName())
-                    .collect(java.util.stream.Collectors.toList());
-                claims.put("permissions", permissions);
-            }
-        } else {
-            // 兼容旧的 role 字符串字段
-            claims.put("role", user.getRole() != null ? user.getRole() : "EXECUTOR");
-            claims.put("roleName", user.getRole() != null ? user.getRole() : "EXECUTOR");
+            claims.put("roles", new String[]{user.getRole().getName()});
         }
 
         return Jwts.builder()
