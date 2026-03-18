@@ -71,6 +71,46 @@ public class UserService {
     }
 
     /**
+     * 验证密码强度
+     * 密码必须满足：
+     * 1. 至少 8 个字符
+     * 2. 包含大写字母
+     * 3. 包含小写字母
+     * 4. 包含数字
+     * 5. 包含特殊字符
+     */
+    private void validatePasswordStrength(String password) {
+        if (password == null || password.length() < 8) {
+            throw new RuntimeException("密码长度至少 8 位");
+        }
+        
+        boolean hasUpper = false;
+        boolean hasLower = false;
+        boolean hasDigit = false;
+        boolean hasSpecial = false;
+        
+        for (char c : password.toCharArray()) {
+            if (Character.isUpperCase(c)) hasUpper = true;
+            else if (Character.isLowerCase(c)) hasLower = true;
+            else if (Character.isDigit(c)) hasDigit = true;
+            else hasSpecial = true;
+        }
+        
+        if (!hasUpper) {
+            throw new RuntimeException("密码必须包含大写字母");
+        }
+        if (!hasLower) {
+            throw new RuntimeException("密码必须包含小写字母");
+        }
+        if (!hasDigit) {
+            throw new RuntimeException("密码必须包含数字");
+        }
+        if (!hasSpecial) {
+            throw new RuntimeException("密码必须包含特殊字符");
+        }
+    }
+
+    /**
      * 修改密码
      * @param userId 用户 ID
      * @param oldPassword 旧密码
@@ -94,6 +134,10 @@ public class UserService {
             log.error("旧密码错误");
             throw new RuntimeException("旧密码错误");
         }
+        
+        // 验证新密码强度
+        validatePasswordStrength(newPassword);
+        log.info("新密码强度验证通过");
         
         // 加密新密码并保存
         String encodedPassword = passwordEncoder.encode(newPassword);
