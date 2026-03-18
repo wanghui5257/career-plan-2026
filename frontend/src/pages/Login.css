@@ -1,0 +1,42 @@
+.login-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 20px;
+}
+
+.login-card {
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  border-radius: 8px;
+}
+
+.login-card .ant-card-head {
+  font-size: 24px;
+  font-weight: 600;
+  color: #1890ff;
+}
+
+.login-card .ant-form-item {
+  margin-bottom: 24px;
+}
+
+.login-card .ant-input-affix-wrapper {
+  padding: 12px;
+}
+
+.login-card .ant-btn {
+  height: 48px;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+/* 移动端适配 */
+@media (max-width: 480px) {
+  .login-card {
+    margin: 20px;
+  }
+}
