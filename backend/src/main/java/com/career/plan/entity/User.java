@@ -21,6 +21,12 @@ public class User {
     private String email;
     private String role;
     
+    @Column(columnDefinition = "TEXT")
+    private String background;
+    
+    @Column(columnDefinition = "TEXT")
+    private String goals;
+    
     @Column(name = "created_at")
     private LocalDateTime createdAt;
     
