@@ -6,7 +6,7 @@ import api from './api';
  */
 class TaskService {
   /**
-   * 获取所有任务
+   * 获取任务列表
    * @returns {Promise<Array>} 任务列表
    */
   async getTasks() {
