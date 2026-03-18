@@ -45,6 +45,10 @@ public class UserService {
                 return new RuntimeException("用户不存在");
             });
 
+        log.info("=== 数据库查询结果 ===");
+        log.info("user.getId(): {}", user.getId());
+        log.info("user.getUsername(): {}", user.getUsername());
+        log.info("user.getRoleId(): {}", user.getRoleId());
         log.info("找到用户：{}", user.getUsername());
         log.info("数据库密码哈希：{}", user.getPassword());
         log.info("密码哈希前缀：{}", user.getPassword().substring(0, 20));
@@ -63,8 +67,8 @@ public class UserService {
         
         // 提取用户角色
         String[] roles = new String[]{};
-        if (user.getRole() != null && !user.getRole().isEmpty()) {
-            roles = new String[]{user.getRole()};
+        if (roleIdToRoleName(user.getRoleId()) != null && !roleIdToRoleName(user.getRoleId()).isEmpty()) {
+            roles = new String[]{roleIdToRoleName(user.getRoleId())};
         }
         
         return new LoginResponse(200, "登录成功", token, jwtExpiration, roles);
@@ -198,14 +202,28 @@ public class UserService {
         return UserProfileResponse.fromUser(user);
     }
 
+    private String roleIdToRoleName(Long roleId) {
+        if (roleId == null) return null;
+        switch (roleId.intValue()) {
+            case 1: return "ADMIN";
+            case 2: return "PLAN_CREATOR";
+            case 3: return "SUPERVISOR";
+            case 4: return "EXECUTOR";
+            case 5: return "WORKER";
+            default: return "UNKNOWN";
+        }
+    }
+
     private String generateToken(User user) {
         Map<String, Object> claims = new HashMap<>();
         claims.put("username", user.getUsername());
+        log.info("=== 生成 Token - userId: {}, username: {}", user.getId(), user.getUsername());
         claims.put("userId", user.getId());
         // 添加 roles 字段（包含角色名称列表）
-        if (user.getRole() != null && !user.getRole().isEmpty()) {
-            claims.put("roles", new String[]{user.getRole()});
+        if (roleIdToRoleName(user.getRoleId()) != null && !roleIdToRoleName(user.getRoleId()).isEmpty()) {
+            claims.put("roles", new String[]{roleIdToRoleName(user.getRoleId())});
         }
+        log.info("Token claims: {}", claims);
 
         return Jwts.builder()
             .setClaims(claims)

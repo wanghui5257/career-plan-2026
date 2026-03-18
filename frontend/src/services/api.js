@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-// API 基础配置
-const API_BASE_URL = 'https://plan.shujuyunxiang.com/back-server/api/v1';
+// API 基础配置（Staging 环境）
+const API_BASE_URL = 'https://staging.plan.shujuyunxiang.com/back-server/api/v1';
 
 // 创建 Axios 实例
 const api = axios.create({
