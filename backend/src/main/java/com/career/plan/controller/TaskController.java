@@ -5,6 +5,8 @@ import com.career.plan.dto.TaskConfirmResponse;
 import com.career.plan.entity.Task;
 import com.career.plan.repository.TaskRepository;
 import jakarta.servlet.http.HttpServletRequest;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,6 +17,8 @@ import java.util.List;
 @RequestMapping("/api/v1/tasks")
 @CrossOrigin(origins = "*")
 public class TaskController {
+    
+    private static final Logger log = LoggerFactory.getLogger(TaskController.class);
     
     @Autowired
     private TaskRepository taskRepository;
@@ -53,6 +57,7 @@ public class TaskController {
     /**
      * 确认任务
      * POST /api/v1/tasks/{taskId}/confirm
+     * 幂等性处理：如果任务已经确认，直接返回成功
      */
     @PostMapping("/{taskId}/confirm")
     public ApiResponse<TaskConfirmResponse> confirmTask(
@@ -74,6 +79,12 @@ public class TaskController {
             String assignedTo = task.getAssignedTo();
             if (assignedTo == null || assignedTo.isEmpty()) {
                 return ApiResponse.error(403, "该任务未分配给用户");
+            }
+            
+            // 幂等性处理：如果任务已经确认，直接返回成功
+            if (Boolean.TRUE.equals(task.getConfirmed())) {
+                log.info("任务 {} 已经确认过，返回幂等响应", taskId);
+                return ApiResponse.success("任务已确认", TaskConfirmResponse.fromTask(task));
             }
             
             // 更新确认状态
