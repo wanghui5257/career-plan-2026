@@ -30,6 +30,11 @@ public class Task {
     @Column(name = "due_date")
     private LocalDateTime dueDate;
     
+    private Boolean confirmed = false;
+    
+    @Column(name = "confirmed_at")
+    private LocalDateTime confirmedAt;
+    
     @Column(name = "created_at")
     private LocalDateTime createdAt;
     

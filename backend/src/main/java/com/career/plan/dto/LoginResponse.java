@@ -12,6 +12,7 @@ public class LoginResponse {
     private String message;
     private String token;
     private long expiresIn;
+<<<<<<< HEAD
     private String[] roles;  // 用户角色列表
     
     // 兼容旧版本的构造函数

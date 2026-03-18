@@ -24,6 +24,12 @@ public class User {
     @JoinColumn(name = "role_id")
     private Role role;
     
+    @Column(columnDefinition = "TEXT")
+    private String background;
+    
+    @Column(columnDefinition = "TEXT")
+    private String goals;
+    
     @Column(name = "created_at")
     private LocalDateTime createdAt;
     
