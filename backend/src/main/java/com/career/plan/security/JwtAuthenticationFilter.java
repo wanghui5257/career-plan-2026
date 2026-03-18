@@ -40,9 +40,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 UsernamePasswordAuthenticationToken authentication = 
                     new UsernamePasswordAuthenticationToken(username, null, authorities);
                 
-                // 将 userId 放在 request attribute 中供 Controller 使用
+                // 将 userId 和 userRole 放在 request attribute 中供 Controller 使用
                 if (userId != null) {
                     request.setAttribute("userId", userId);
+                }
+                // 设置用户角色（取第一个角色）
+                if (roles != null && !roles.isEmpty()) {
+                    request.setAttribute("userRole", roles.get(0));
                 }
                 
                 SecurityContextHolder.getContext().setAuthentication(authentication);

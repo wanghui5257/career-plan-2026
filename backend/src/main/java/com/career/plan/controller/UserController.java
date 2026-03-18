@@ -50,10 +50,15 @@ public class UserController {
             HttpServletRequest httpRequest) {
         try {
             // 验证当前用户角色（顾问专用）
-            // 这里简化处理，实际应该检查角色
             Long currentUserId = (Long) httpRequest.getAttribute("userId");
             if (currentUserId == null) {
                 return ApiResponse.error(401, "未授权访问");
+            }
+            
+            // 获取用户角色并验证是否为顾问
+            String userRole = (String) httpRequest.getAttribute("userRole");
+            if (userRole == null || !"顾问".equals(userRole)) {
+                return ApiResponse.error(403, "权限不足：仅顾问可以查看用户资料");
             }
             
             UserProfileResponse profile = userService.getUserProfile(userId);
