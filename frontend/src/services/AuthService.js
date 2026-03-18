@@ -35,15 +35,15 @@ class AuthService {
 
   /**
    * 用户登出
+   * 注意：JWT 是无状态的，登出只需清除本地 Token，无需调用后端 API
    */
   async logout() {
-    // JWT 无状态认证，登出只需清除本地 Token，无需调用后端 API
-    try {
-      localStorage.removeItem('jwt_token');
-      localStorage.removeItem('user_info');
-    } catch (error) {
-      console.error('登出失败:', error);
-    }
+    // 清除本地存储
+    localStorage.removeItem('jwt_token');
+    localStorage.removeItem('user_info');
+    
+    // 可选：将当前 token 加入黑名单（如果需要实现 token 撤销）
+    // await api.post('/auth/logout').catch(() => {});
   }
 
   /**
