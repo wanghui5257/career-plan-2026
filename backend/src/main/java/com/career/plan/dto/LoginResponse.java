@@ -12,4 +12,5 @@ public class LoginResponse {
     private String message;
     private String token;
     private long expiresIn;
+    private String[] roles;
 }
