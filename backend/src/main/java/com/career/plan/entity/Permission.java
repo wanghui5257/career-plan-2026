@@ -6,29 +6,17 @@ import java.time.LocalDateTime;
 
 @Data
 @Entity
-@Table(name = "progress_tracking")
-public class Progress {
+@Table(name = "permissions")
+public class Permission {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
-    @Column(name = "plan_id", nullable = false)
-    private Long planId;
+    @Column(unique = true, nullable = false, length = 100)
+    private String name;  // PLAN_CREATE, PLAN_VIEW, PLAN_UPDATE, PLAN_DELETE, etc.
     
-    @Column(name = "progress_percentage")
-    private Integer progressPercentage;  // 0-100
-    
-    @Column(name = "completed_tasks")
-    private Integer completedTasks;
-    
-    @Column(name = "total_tasks")
-    private Integer totalTasks;
-    
-    @Column(name = "pending_tasks")
-    private Integer pendingTasks;
-    
-    @Column(name = "in_progress_tasks")
-    private Integer inProgressTasks;
+    @Column(length = 255)
+    private String description;
     
     @Column(name = "created_at")
     private LocalDateTime createdAt;

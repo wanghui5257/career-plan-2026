@@ -8,6 +8,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -24,32 +25,38 @@ public class TaskController {
     private TaskRepository taskRepository;
     
     @GetMapping
+    @PreAuthorize("hasRole('PLAN_VIEW')")
     public List<Task> getAllTasks() {
         return taskRepository.findAll();
     }
     
     @GetMapping("/{id}")
+    @PreAuthorize("hasRole('PLAN_VIEW')")
     public Task getTask(@PathVariable Long id) {
         return taskRepository.findById(id).orElse(null);
     }
     
     @PostMapping
+    @PreAuthorize("hasRole('PLAN_CREATOR')")
     public Task createTask(@RequestBody Task task) {
         return taskRepository.save(task);
     }
     
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('PLAN_CREATOR')")
     public Task updateTask(@PathVariable Long id, @RequestBody Task task) {
         task.setId(id);
         return taskRepository.save(task);
     }
     
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('PLAN_CREATOR')")
     public void deleteTask(@PathVariable Long id) {
         taskRepository.deleteById(id);
     }
     
     @GetMapping("/assignee/{assignee}")
+    @PreAuthorize("hasRole('PLAN_VIEW')")
     public List<Task> getByAssignee(@PathVariable String assignee) {
         return taskRepository.findByAssignedTo(assignee);
     }

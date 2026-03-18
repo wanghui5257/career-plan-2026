@@ -3,32 +3,30 @@ package com.career.plan.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @Data
 @Entity
-@Table(name = "progress_tracking")
-public class Progress {
+@Table(name = "roles")
+public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
-    @Column(name = "plan_id", nullable = false)
-    private Long planId;
+    @Column(unique = true, nullable = false, length = 50)
+    private String name;  // PLAN_CREATOR, SUPERVISOR, EXECUTOR, WORKER, ADMIN
     
-    @Column(name = "progress_percentage")
-    private Integer progressPercentage;  // 0-100
+    @Column(length = 255)
+    private String description;
     
-    @Column(name = "completed_tasks")
-    private Integer completedTasks;
-    
-    @Column(name = "total_tasks")
-    private Integer totalTasks;
-    
-    @Column(name = "pending_tasks")
-    private Integer pendingTasks;
-    
-    @Column(name = "in_progress_tasks")
-    private Integer inProgressTasks;
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+        name = "role_permissions",
+        joinColumns = @JoinColumn(name = "role_id"),
+        inverseJoinColumns = @JoinColumn(name = "permission_id")
+    )
+    private Set<Permission> permissions = new HashSet<>();
     
     @Column(name = "created_at")
     private LocalDateTime createdAt;

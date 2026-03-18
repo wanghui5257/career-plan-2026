@@ -2,43 +2,45 @@ package com.career.plan.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
 @Entity
-@Table(name = "plans")
-public class Plan {
+@Table(name = "reminders")
+public class Reminder {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
-    @Column(name = "tenant_id", length = 64)
-    private String tenantId;
-    
-    @Column(name = "user_id")
+    @Column(name = "user_id", nullable = false)
     private Long userId;
+    
+    @Column(name = "task_id")
+    private Long taskId;
+    
+    @Column(name = "plan_id")
+    private Long planId;
     
     @Column(nullable = false, length = 255)
     private String title;
     
     @Column(columnDefinition = "TEXT")
-    private String description;
-    
-    @Column(columnDefinition = "TEXT")
-    private String goal;
-    
-    @Column(name = "start_date")
-    private LocalDate startDate;
-    
-    @Column(name = "end_date")
-    private LocalDate endDate;
+    private String content;
     
     @Column(nullable = false, length = 50)
-    private String status;  // DRAFT, ACTIVE, COMPLETED, ARCHIVED
+    private String type;  // TASK_DUE, TASK_OVERDUE, PROGRESS_REMINDER, CUSTOM
     
-    @Column(name = "created_by")
-    private Long createdBy;
+    @Column(nullable = false, length = 50)
+    private String channel;  // IN_APP, EMAIL, DINGTALK
+    
+    @Column(nullable = false, length = 50)
+    private String status;  // PENDING, SENT, READ
+    
+    @Column(name = "send_at")
+    private LocalDateTime sendAt;
+    
+    @Column(name = "read_at")
+    private LocalDateTime readAt;
     
     @Column(name = "created_at")
     private LocalDateTime createdAt;

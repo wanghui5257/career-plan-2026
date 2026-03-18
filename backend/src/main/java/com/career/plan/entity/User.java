@@ -19,7 +19,10 @@ public class User {
     private String password;
     
     private String email;
-    private String role;
+    
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "role_id")
+    private Role role;
     
     @Column(columnDefinition = "TEXT")
     private String background;

@@ -1,24 +1,21 @@
 import React, { useState, useEffect } from 'react';
-import { Card, Row, Col, Button, Progress, Statistic, Spin, Empty, Tabs, message } from 'antd';
+import { Card, Row, Col, Button, Progress, Statistic, Spin, Empty } from 'antd';
 import { PlusOutlined, DashboardOutlined, FileTextOutlined, CheckCircleOutlined } from '@ant-design/icons';
 import TaskCard from '../components/TaskCard';
 import ResponsiveTable from '../components/ResponsiveTable';
-import { ProgressChart, TaskDistribution, StatsChart } from '../components/charts';
 import PlanService from '../services/PlanService';
 import ProgressService from '../services/ProgressService';
-import TaskService from '../services/TaskService';
 import './Dashboard.css';
 
 /**
  * Dashboard 主页组件
- * 显示计划列表、进度概览、任务卡片、可视化图表
+ * 显示计划列表、进度概览、快速创建任务入口
  */
 const Dashboard = () => {
   const [loading, setLoading] = useState(true);
   const [plans, setPlans] = useState([]);
   const [tasks, setTasks] = useState([]);
   const [summary, setSummary] = useState(null);
-  const [history, setHistory] = useState([]);
 
   // 加载数据
   useEffect(() => {
@@ -36,13 +33,9 @@ const Dashboard = () => {
       const summaryData = await ProgressService.getProgressSummary();
       setSummary(summaryData);
 
-      // 获取进度历史
-      const historyData = await ProgressService.getProgressHistory();
-      setHistory(historyData || []);
-
-      // 从计划中提取任务，如果计划为空则直接获取任务列表
-      let allTasks = [];
-      if (plansData && plansData.length > 0) {
+      // 从计划中提取任务（简化处理）
+      const allTasks = [];
+      if (plansData) {
         plansData.forEach(plan => {
           if (plan.tasks) {
             plan.tasks.forEach(task => {
@@ -54,16 +47,6 @@ const Dashboard = () => {
             });
           }
         });
-      } else {
-        // 如果没有计划，直接获取任务列表
-        const tasksData = await TaskService.getTasks();
-        if (tasksData) {
-          allTasks = tasksData.map(task => ({
-            ...task,
-            key: `${task.id}`,
-            planName: '-'
-          }));
-        }
       }
       setTasks(allTasks.slice(0, 4)); // 只显示最近 4 个任务
     } catch (error) {
@@ -132,10 +115,10 @@ const Dashboard = () => {
     <div className="dashboard">
       {/* 快速操作区 */}
       <div className="quick-actions">
-        <Button type="primary" icon={<PlusOutlined />} size="large" onClick={() => message.info('创建计划功能开发中')}>
+        <Button type="primary" icon={<PlusOutlined />} size="large">
           创建计划
         </Button>
-        <Button type="default" icon={<PlusOutlined />} size="large" onClick={() => message.info('创建任务功能开发中')}>
+        <Button type="default" icon={<PlusOutlined />} size="large">
           创建任务
         </Button>
       </div>
@@ -156,7 +139,7 @@ const Dashboard = () => {
           <Card className="stats-card">
             <Statistic
               title="进行中"
-              value={summary?.ongoingPlans || (plans.length > 0 ? plans.filter(p => p.status === '进行中').length : tasks.filter(t => t.status === 'IN_PROGRESS').length)}
+              value={summary?.ongoingPlans || plans.filter(p => p.status === '进行中').length}
               prefix={<DashboardOutlined />}
               valueStyle={{ color: '#52c41a' }}
             />
@@ -176,39 +159,13 @@ const Dashboard = () => {
           <Card className="stats-card">
             <Statistic
               title="完成率"
-              value={summary?.completionRate || (tasks.length > 0 ? Math.round((tasks.filter(t => t.status === 'DONE' || t.status === 'COMPLETED').length / tasks.length) * 100) : 0)}
+              value={summary?.completionRate || 0}
               suffix="%"
               valueStyle={{ color: '#faad14' }}
             />
           </Card>
         </Col>
       </Row>
-
-      {/* 可视化图表 */}
-      <Tabs
-        defaultActiveKey="overview"
-        items={[
-          {
-            key: 'overview',
-            label: '📊 总览',
-            children: (
-              <Row gutter={[16, 16]}>
-                <Col xs={24} lg={12}>
-                  <ProgressChart plans={plans} />
-                </Col>
-                <Col xs={24} lg={12}>
-                  <TaskDistribution tasks={tasks} />
-                </Col>
-              </Row>
-            ),
-          },
-          {
-            key: 'trend',
-            label: '📈 趋势',
-            children: <StatsChart history={history} />,
-          },
-        ]}
-      />
 
       {/* 计划列表 */}
       <Card 

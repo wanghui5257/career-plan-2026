@@ -63,8 +63,8 @@ public class UserService {
         
         // 提取用户角色
         String[] roles = new String[]{};
-        if (user.getRole() != null && !user.getRole().isEmpty()) {
-            roles = new String[]{user.getRole()};
+        if (user.getRole() != null) {
+            roles = new String[]{user.getRole().getName()};
         }
         
         return new LoginResponse(200, "登录成功", token, jwtExpiration, roles);
@@ -203,8 +203,8 @@ public class UserService {
         claims.put("username", user.getUsername());
         claims.put("userId", user.getId());
         // 添加 roles 字段（包含角色名称列表）
-        if (user.getRole() != null && !user.getRole().isEmpty()) {
-            claims.put("roles", new String[]{user.getRole()});
+        if (user.getRole() != null) {
+            claims.put("roles", new String[]{user.getRole().getName()});
         }
 
         return Jwts.builder()

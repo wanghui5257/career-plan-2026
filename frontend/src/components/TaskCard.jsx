@@ -7,7 +7,7 @@ import './TaskCard.css';
  * - 桌面端：紧凑布局，显示更多信息
  */
 const TaskCard = ({ 
-  task = {},
+  task,
   onClick,
   onStatusChange
 }) => {
@@ -20,7 +20,7 @@ const TaskCard = ({
     progress = 0,
     dueDate,
     assignee 
-  } = task || {};
+  } = task;
 
   const getStatusColor = (status) => {
     switch (status) {
@@ -60,7 +60,7 @@ const TaskCard = ({
 
   return (
     <div 
-      className={`task-card ${status?.toLowerCase() || ''}`}
+      className={`task-card ${status.toLowerCase()}`}
       onClick={() => onClick && onClick(task)}
     >
       {/* 卡片头部 */}
