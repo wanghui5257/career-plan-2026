@@ -74,14 +74,19 @@ public class UserService {
      * 验证密码强度
      * 密码必须满足：
      * 1. 至少 8 个字符
-     * 2. 包含大写字母
-     * 3. 包含小写字母
-     * 4. 包含数字
-     * 5. 包含特殊字符
+     * 2. 最多 100 个字符
+     * 3. 包含大写字母
+     * 4. 包含小写字母
+     * 5. 包含数字
+     * 6. 包含特殊字符
      */
     private void validatePasswordStrength(String password) {
         if (password == null || password.length() < 8) {
             throw new RuntimeException("密码长度至少 8 位");
+        }
+        
+        if (password.length() > 100) {
+            throw new RuntimeException("密码长度不能超过 100 位");
         }
         
         boolean hasUpper = false;
