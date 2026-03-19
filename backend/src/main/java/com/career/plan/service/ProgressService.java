@@ -56,7 +56,7 @@ public class ProgressService {
         int progressPercentage = totalTasks > 0 ? (int) Math.round((double) completedTasks / totalTasks * 100) : 0;
         
         // 查询现有进度记录
-        Progress progress = progressRepository.findByPlanId(planId).orElse(new Progress());
+        Progress progress = progressRepository.findTopByPlanIdOrderByUpdatedAtDesc(planId).orElse(new Progress());
         progress.setPlanId(planId);
         progress.setProgressPercentage(progressPercentage);
         progress.setCompletedTasks((int) completedTasks);
@@ -72,7 +72,7 @@ public class ProgressService {
      */
     @Transactional(readOnly = true)
     public Progress getPlanProgress(Long planId) {
-        return progressRepository.findByPlanId(planId).orElse(null);
+        return progressRepository.findTopByPlanIdOrderByUpdatedAtDesc(planId).orElse(null);
     }
     
     /**

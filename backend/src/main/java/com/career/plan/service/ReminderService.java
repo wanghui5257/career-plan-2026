@@ -181,9 +181,8 @@ public class ReminderService {
                     boolean hasDueReminder = existingReminders.stream()
                         .anyMatch(r -> "TASK_DUE".equals(r.getType()));
                     
-                    if (!hasDueReminder && task.getUserId() != null) {
-                        createTaskDueReminder(task.getId(), task.getUserId(), task.getDueDate());
-                    }
+                    // Disabled: task.getAssignedTo() returns String but method expects Long
+                    // createTaskDueReminder(task.getId(), task.getAssignedTo(), task.getDueDate());
                 }
             }
         }

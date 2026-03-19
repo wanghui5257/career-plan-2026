@@ -37,7 +37,7 @@ public class RoleService {
             List<Permission> permissions = permissionRepository.findAllById(
                 request.getPermissions().stream()
                     .map(this::getPermissionIdByName)
-                    .filter(id -> id != null)
+                    .filter(pid -> pid != null)
                     .collect(Collectors.toList())
             );
             role.setPermissions(new HashSet<>(permissions));
@@ -87,7 +87,7 @@ public class RoleService {
             List<Permission> permissions = permissionRepository.findAllById(
                 request.getPermissions().stream()
                     .map(this::getPermissionIdByName)
-                    .filter(id -> id != null)
+                    .filter(pid -> pid != null)
                     .collect(Collectors.toList())
             );
             role.setPermissions(new HashSet<>(permissions));
