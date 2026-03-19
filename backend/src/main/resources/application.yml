@@ -9,7 +9,7 @@ spring:
   datasource:
     url: jdbc:mysql://localhost:3306/career_plan?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
     username: career_user
-    password: CareerPlan2026!
+    password: ${DB_PASSWORD:}
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
@@ -34,8 +34,11 @@ management:
         enabled: true
 
 jwt:
-  secret: v9Kx+L2RqP7mZ4wE1tY6uI8oA3sD5fG0hJ9kL1mN4pQ=
+  secret: ${JWT_SECRET:}
   expiration: 86400000
+
+cors:
+  allowed-origins: ${CORS_ALLOWED_ORIGINS:https://plan.shujuyunxiang.com}
 
 springdoc:
   api-docs:
