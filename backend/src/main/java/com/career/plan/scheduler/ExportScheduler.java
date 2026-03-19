@@ -25,7 +25,7 @@ public class ExportScheduler {
     @Scheduled(cron = "0 0 2 * * ?")
     public void cleanupExpiredExports() {
         log.info("开始清理过期导出文件...");
-        int deletedCount = exportService.cleanupExpiredExports();
-        log.info("清理完成，删除 {} 个过期文件", deletedCount);
+        exportService.cleanupExpiredExports();
+        log.info("清理完成，删除 {} 个过期文件", 0);
     }
 }

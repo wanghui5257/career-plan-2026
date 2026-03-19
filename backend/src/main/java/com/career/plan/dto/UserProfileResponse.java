@@ -19,7 +19,7 @@ public class UserProfileResponse {
         response.setId(user.getId());
         response.setUsername(user.getUsername());
         response.setEmail(user.getEmail());
-        response.setRole(user.getRole());
+        response.setRole(user.getRole() != null ? user.getRole().getName() : null);
         response.setBackground(user.getBackground());
         response.setGoals(user.getGoals());
         response.setCreatedAt(user.getCreatedAt());
