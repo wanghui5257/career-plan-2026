@@ -8,6 +8,10 @@ import com.career.plan.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+
 
 @RestController
 @RequestMapping("/api/v1/user")
@@ -91,5 +95,33 @@ public class UserController {
         } catch (Exception e) {
             return ApiResponse.error(500, "服务器内部错误");
         }
+    }
+
+    /**
+     * 获取角色列表
+     * GET /api/v1/user/roles
+     */
+    @GetMapping("/roles")
+    public ApiResponse<List<Map<String, Object>>> getRoles() {
+        try {
+            List<Map<String, Object>> roles = Arrays.asList(
+                createRoleMap(1L, "ADMIN", "管理员"),
+                createRoleMap(2L, "PLAN_CREATOR", "计划创建者"),
+                createRoleMap(3L, "SUPERVISOR", "顾问"),
+                createRoleMap(4L, "EXECUTOR", "执行者"),
+                createRoleMap(5L, "WORKER", "工作者")
+            );
+            return ApiResponse.success("查询成功", roles);
+        } catch (Exception e) {
+            return ApiResponse.error(500, "服务器内部错误");
+        }
+    }
+
+    private Map<String, Object> createRoleMap(Long id, String code, String name) {
+        return Map.of(
+            "id", id,
+            "code", code,
+            "name", name
+        );
     }
 }

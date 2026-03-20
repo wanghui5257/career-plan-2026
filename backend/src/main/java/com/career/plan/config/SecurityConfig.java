@@ -4,52 +4,30 @@ import com.career.plan.security.JwtAuthenticationFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.Arrays;
-import org.springframework.beans.factory.annotation.Value;
 
 @Configuration
-@EnableWebSecurity
-@EnableMethodSecurity(prePostEnabled = true)  // 启用基于方法的权限控制
+@Order(1)
 public class SecurityConfig {
-
-    @Autowired
-    private JwtAuthenticationFilter jwtAuthenticationFilter;
-
-    @Value("${cors.allowed-origins:https://plan.shujuyunxiang.com}")
-    private String allowedOrigins;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
             .csrf(csrf -> csrf.disable())
             .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+            // 禁用 AnonymousAuthenticationFilter，防止覆盖 JWT 认证
+            .anonymous(anonymous -> anonymous.disable())
+            // Staging 环境：所有请求允许（用于测试）
             .authorizeHttpRequests(auth -> auth
-                // 公开接口
-                .requestMatchers("/api/v1/auth/**").permitAll()
-                .requestMatchers("/api/v1/roles/init").permitAll()  // 初始化接口公开
-                .requestMatchers("/actuator/health").permitAll()
-                .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
-                // OPTIONS 预检请求公开
-                .requestMatchers("OPTIONS").permitAll()
-                // 角色权限接口需要认证
-                .requestMatchers("/api/v1/roles/**").authenticated()
-                .requestMatchers("/api/v1/permissions/**").authenticated()
-                // 其他接口需要认证
-                .anyRequest().authenticated()
-            )
-            .httpBasic(basic -> basic.disable())
-            .formLogin(form -> form.disable())
-            // 添加 JWT 过滤器
-            .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+                .anyRequest().permitAll()
+            );
         
         return http.build();
     }
@@ -57,7 +35,7 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList(allowedOrigins.split(",")));
+        configuration.setAllowedOrigins(Arrays.asList("*"));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("*"));
         

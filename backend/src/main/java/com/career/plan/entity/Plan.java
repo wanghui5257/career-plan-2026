@@ -35,7 +35,16 @@ public class Plan {
     private LocalDate endDate;
     
     @Column(nullable = false, length = 50)
-    private String status;  // DRAFT, ACTIVE, COMPLETED, ARCHIVED
+    private String status = "DRAFT";
+    
+    @Column(nullable = false)
+    private Integer progress = 0;
+    
+    @Column(nullable = false, length = 50)
+    private String priority = "MEDIUM";
+    
+    @Column(name = "assigned_to", length = 255)
+    private String assignedTo;
     
     @Column(name = "created_by")
     private Long createdBy;
@@ -50,6 +59,9 @@ public class Plan {
     protected void onCreate() {
         createdAt = LocalDateTime.now();
         updatedAt = LocalDateTime.now();
+        if (this.status == null) this.status = "DRAFT";
+        if (this.progress == null) this.progress = 0;
+        if (this.priority == null) this.priority = "MEDIUM";
     }
     
     @PreUpdate
