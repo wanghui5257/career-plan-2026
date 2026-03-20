@@ -1,0 +1,11 @@
+spring:
+  datasource:
+    password: CareerPlan2026!
+
+jwt:
+  secret: v9Kx+L2RqP7mZ4wE1tY6uI8oA3sD5fG0hJ9kL1mN4pQ=
+
+logging:
+  level:
+    org.springframework.security: INFO
+    org.springframework.web: INFO
