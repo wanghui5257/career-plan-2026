@@ -1,16 +1,16 @@
 import React from 'react';
 import './TaskCard.css';
 
-/**
- * 响应式任务卡片组件
- * - 移动端：垂直布局，大字体，触摸友好
- * - 桌面端：紧凑布局，显示更多信息
- */
 const TaskCard = ({ 
   task,
   onClick,
   onStatusChange
 }) => {
+  // 空值保护
+  if (!task) {
+    return null;
+  }
+  
   const { 
     id, 
     title, 
@@ -60,22 +60,19 @@ const TaskCard = ({
 
   return (
     <div 
-      className={`task-card ${status.toLowerCase()}`}
+      className={`task-card ${status?.toLowerCase() || ''}`}
       onClick={() => onClick && onClick(task)}
     >
-      {/* 卡片头部 */}
       <div className="task-card-header">
         <h3 className="task-card-title">{title}</h3>
         {getPriorityBadge(priority)}
       </div>
 
-      {/* 卡片内容 */}
       <div className="task-card-content">
         {description && (
           <p className="task-card-description">{description}</p>
         )}
 
-        {/* 进度条 */}
         {progress !== undefined && (
           <div className="task-progress">
             <div className="task-progress-bar">
@@ -91,7 +88,6 @@ const TaskCard = ({
           </div>
         )}
 
-        {/* 卡片底部信息 */}
         <div className="task-card-footer">
           <div className="task-meta">
             {dueDate && (
@@ -117,7 +113,6 @@ const TaskCard = ({
         </div>
       </div>
 
-      {/* 移动端操作按钮 */}
       <div className="task-card-actions">
         {status !== 'DONE' && status !== 'COMPLETED' && (
           <button 

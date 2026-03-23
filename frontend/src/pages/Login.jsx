@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Form, Input, Button, Card, message, Alert } from 'antd';
+import { Form, Input, Button, Card, message } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import { useNavigate, useLocation } from 'react-router-dom';
 import AuthService from '../services/AuthService';
@@ -40,14 +40,6 @@ const Login = () => {
   return (
     <div className="login-container">
       <Card className="login-card" title="职业发展计划" headStyle={{ textAlign: 'center', fontSize: '24px' }}>
-        <Alert
-          message="提示"
-          description="演示账号：admin / 123456"
-          type="info"
-          showIcon
-          style={{ marginBottom: 24 }}
-        />
-        
         <Form
           name="login"
           initialValues={{ remember: true }}

@@ -360,3 +360,19 @@ body {
     display: block;
   }
 }
+
+/* 应用布局 */
+.app-container {
+  min-height: 100vh;
+  background: #f5f7fa;
+}
+
+.app-with-navbar {
+  min-height: 100vh;
+}
+
+.main-content {
+  padding: 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
