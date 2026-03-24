@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Card, Button, Timeline, Modal, Form, Input, Slider, message, Table, Tag, Space, Popconfirm, DatePicker } from 'antd';
+import { Card, Button, Timeline, Modal, Form, Input, Slider, message, Table, Tag, Space, Popconfirm, DatePicker, Row, Col } from 'antd';
 import { PlusOutlined, EditOutlined, DeleteOutlined, LineChartOutlined } from '@ant-design/icons';
 import ProgressService from '../services/ProgressService';
+import PlanService from '../services/PlanService';
 import dayjs from 'dayjs';
 
 const { TextArea } = Input;
@@ -29,10 +30,10 @@ const ProgressHistory = () => {
     setLoading(true);
     try {
       // 对接真实 API
-      const plansData = await PlanService.getPlans();
-      const historyData = await ProgressService.getProgressHistory();
+      // const plansData = await PlanService.getPlans();
+      // const historyData = await ProgressService.getProgressHistory(selectedPlanId);
       
-      // Mock 数据已移除，使用真实 API，等待 Progress API 完成
+      // TODO: 暂时使用 Mock 数据，等待 Progress API 完成
       const mockPlans = [
         { id: 1, name: 'AI 学习计划', progress: 45 },
         { id: 2, name: '前端进阶计划', progress: 60 },
