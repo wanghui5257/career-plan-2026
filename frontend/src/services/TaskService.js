@@ -19,7 +19,7 @@ class TaskService {
    * @returns {Promise<Object>} 任务详情
    */
   async getTask(id) {
-    return await api.get(`/tasks/${id}`);
+    return await api.get(\`/tasks/\${id}\`);
   }
 
   /**
@@ -38,7 +38,7 @@ class TaskService {
    * @returns {Promise<Object>} 更新后的任务
    */
   async updateTask(id, taskData) {
-    return await api.put(`/tasks/${id}`, taskData);
+    return await api.put(\`/tasks/\${id}\`, taskData);
   }
 
   /**
@@ -47,7 +47,16 @@ class TaskService {
    * @returns {Promise<void>}
    */
   async deleteTask(id) {
-    return await api.delete(`/tasks/${id}`);
+    return await api.delete(\`/tasks/\${id}\`);
+  }
+
+  /**
+   * 确认任务
+   * @param {number} id - 任务 ID
+   * @returns {Promise<Object>} 确认结果
+   */
+  async confirmTask(id) {
+    return await api.post(\`/tasks/\${id}/confirm\`);
   }
 }
 
