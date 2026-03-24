@@ -1,10 +1,19 @@
 import axios from 'axios';
 
-// API 基础配置 - 根据环境自动选择
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 
-  (window.location.hostname === 'plan.shujuyunxiang.com' 
-    ? 'https://plan.shujuyunxiang.com/back-server/api/v1'
-    : 'https://staging.plan.shujuyunxiang.com/back-server/api/v1');
+// API 基础配置 - 根据域名自动选择正确的后端
+const getApiBaseUrl = () => {
+  const hostname = window.location.hostname;
+  
+  // Production 环境
+  if (hostname === 'plan.shujuyunxiang.com') {
+    return 'https://plan.shujuyunxiang.com/back-server/api/v1';
+  }
+  
+  // Staging 环境（默认）
+  return 'https://staging.plan.shujuyunxiang.com/back-server/api/v1';
+};
+
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || getApiBaseUrl();
 
 console.log('API Base URL:', API_BASE_URL);
 
@@ -17,7 +26,7 @@ const api = axios.create({
   },
 });
 
-// 请求拦截器 - 自动附加 JWT Token
+// 请求拦截器
 api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('jwt_token');
@@ -31,20 +40,18 @@ api.interceptors.request.use(
   }
 );
 
-// 响应拦截器 - 处理错误
+// 响应拦截器
 api.interceptors.response.use(
   (response) => {
     return response.data;
   },
   (error) => {
-    // 401 - 未授权，跳转到登录页
     if (error.response && error.response.status === 401) {
       localStorage.removeItem('jwt_token');
       localStorage.removeItem('user_info');
       window.location.href = '/login';
     }
     
-    // 统一错误处理
     const errorMessage = error.response?.data?.message || '请求失败，请稍后重试';
     console.error('API Error:', errorMessage);
     
