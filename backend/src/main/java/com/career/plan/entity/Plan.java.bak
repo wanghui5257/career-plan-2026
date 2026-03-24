@@ -40,8 +40,6 @@ public class Plan {
     
     @Column(nullable = false)
     private String priority = "MEDIUM"; // LOW, MEDIUM, HIGH
-
-    private Integer progress = 0;
     
     @Column(name = "assigned_to")
     private String assignedTo;
@@ -98,9 +96,6 @@ public class Plan {
     
     public String getPriority() { return priority; }
     public void setPriority(String priority) { this.priority = priority; }
-
-    public Integer getProgress() { return progress; }
-    public void setProgress(Integer progress) { this.progress = progress; }
     
     public String getAssignedTo() { return assignedTo; }
     public void setAssignedTo(String assignedTo) { this.assignedTo = assignedTo; }
