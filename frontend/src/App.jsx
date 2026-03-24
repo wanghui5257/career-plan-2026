@@ -3,7 +3,7 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import ResponsiveNavbar from './components/ResponsiveNavbar';
 import Dashboard from './pages/Dashboard';
 import Login from './pages/Login';
-import UserProfile from './pages/UserProfile';
+import Profile from './pages/Profile';
 import ChangePasswordForm from './pages/ChangePasswordForm';
 import PrivateRoute from './components/PrivateRoute';
 import AuthService from './services/AuthService';
