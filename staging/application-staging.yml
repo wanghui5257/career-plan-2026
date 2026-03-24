@@ -11,7 +11,7 @@ spring:
       idle-timeout: 600000
       max-lifetime: 1800000
   security:
-    enabled: false
+    enabled: true
 
 jwt:
   secret: v9Kx+L2RqP7mZ4wE1tY6uI8oA3sD5fG0hJ9kL1mN4pQ=
