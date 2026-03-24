@@ -1,7 +1,12 @@
 import axios from 'axios';
 
-// API 基础配置
-const API_BASE_URL = 'http://47.115.63.159:9999/back-server/api/v1';
+// API 基础配置 - 根据环境自动选择
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 
+  (window.location.hostname === 'plan.shujuyunxiang.com' 
+    ? 'https://plan.shujuyunxiang.com/back-server/api/v1'
+    : 'https://staging.plan.shujuyunxiang.com/back-server/api/v1');
+
+console.log('API Base URL:', API_BASE_URL);
 
 // 创建 Axios 实例
 const api = axios.create({
