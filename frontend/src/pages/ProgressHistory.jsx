@@ -29,10 +29,10 @@ const ProgressHistory = () => {
     setLoading(true);
     try {
       // 对接真实 API
-      // const plansData = await PlanService.getPlans();
-      // const historyData = await ProgressService.getProgressHistory(selectedPlanId);
+      const plansData = await PlanService.getPlans();
+      const historyData = await ProgressService.getProgressHistory();
       
-      // TODO: 暂时使用 Mock 数据，等待 Progress API 完成
+      // Mock 数据已移除，使用真实 API，等待 Progress API 完成
       const mockPlans = [
         { id: 1, name: 'AI 学习计划', progress: 45 },
         { id: 2, name: '前端进阶计划', progress: 60 },

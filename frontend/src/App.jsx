@@ -6,6 +6,7 @@ import Login from './pages/Login';
 import PlanList from './pages/PlanList';
 import TaskList from './pages/TaskList';
 import ProgressHistory from './pages/ProgressHistory';
+import Profile from './pages/Profile';
 import PrivateRoute from './components/PrivateRoute';
 import AuthService from './services/AuthService';
 import './styles/responsive.css';
@@ -130,7 +131,7 @@ function App() {
               <div className="app-with-navbar">
                 <ResponsiveNavbar title="职业发展计划" rightContent={<span></span>} />
                 <main className="main-content">
-                  <div style={{ padding: '24px' }}>
+                  <Profile />
                     <h2>个人中心</h2>
                     <p>功能开发中...</p>
                   </div>
