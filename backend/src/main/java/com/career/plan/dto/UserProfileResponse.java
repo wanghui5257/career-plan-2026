@@ -19,11 +19,23 @@ public class UserProfileResponse {
         response.setId(user.getId());
         response.setUsername(user.getUsername());
         response.setEmail(user.getEmail());
-        response.setRole(user.getRole() != null ? user.getRole().getName() : null);
+        response.setRole(roleIdToRoleName(user.getRoleId()));
         response.setBackground(user.getBackground());
         response.setGoals(user.getGoals());
         response.setCreatedAt(user.getCreatedAt());
         response.setUpdatedAt(user.getUpdatedAt());
         return response;
+    }
+    
+    private static String roleIdToRoleName(Long roleId) {
+        if (roleId == null) return null;
+        switch (roleId.intValue()) {
+            case 1: return "ADMIN";
+            case 2: return "PLAN_CREATOR";
+            case 3: return "SUPERVISOR";
+            case 4: return "EXECUTOR";
+            case 5: return "WORKER";
+            default: return "UNKNOWN";
+        }
     }
 }

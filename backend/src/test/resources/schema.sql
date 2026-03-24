@@ -5,6 +5,19 @@ CREATE TABLE IF NOT EXISTS users (
     password VARCHAR(255) NOT NULL,
     email VARCHAR(100),
     role VARCHAR(20) DEFAULT 'USER',
+    background TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS plans (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(200) NOT NULL,
+    description VARCHAR(2000),
+    status VARCHAR(20) DEFAULT 'TODO',
+    progress INT DEFAULT 0,
+    priority VARCHAR(20) DEFAULT 'MEDIUM',
+    assigned_to VARCHAR(100),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
@@ -18,20 +31,23 @@ CREATE TABLE IF NOT EXISTS tasks (
     priority VARCHAR(20) DEFAULT 'MEDIUM',
     assigned_to VARCHAR(100),
     due_date TIMESTAMP,
+    confirmed BOOLEAN DEFAULT FALSE,
+    confirmed_at TIMESTAMP,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE IF NOT EXISTS progress_reports (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    plan_id BIGINT,
     task_id BIGINT,
     user_id BIGINT,
+    progress INT DEFAULT 0,
+    comment VARCHAR(2000),
     content TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (plan_id) REFERENCES plans(id),
     FOREIGN KEY (task_id) REFERENCES tasks(id),
     FOREIGN KEY (user_id) REFERENCES users(id)
 );
-
--- 插入测试用户（密码：admin123 的 BCrypt 哈希）
-INSERT INTO users (username, password, email, role) VALUES
-('admin', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', 'admin@test.com', 'ADMIN');

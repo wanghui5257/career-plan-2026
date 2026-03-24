@@ -1,13 +1,12 @@
 package com.career.plan.entity;
 
 import jakarta.persistence.*;
-import lombok.Data;
 import java.time.LocalDateTime;
 
-@Data
 @Entity
-@Table(name = "progress_tracking")
+@Table(name = "progress_reports")
 public class Progress {
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -15,20 +14,14 @@ public class Progress {
     @Column(name = "plan_id", nullable = false)
     private Long planId;
     
-    @Column(name = "progress_percentage")
-    private Integer progressPercentage;  // 0-100
+    @Column(name = "task_id", nullable = false)
+    private Long taskId;
     
-    @Column(name = "completed_tasks")
-    private Integer completedTasks;
+    @Column(nullable = false)
+    private Integer progress = 0;
     
-    @Column(name = "total_tasks")
-    private Integer totalTasks;
-    
-    @Column(name = "pending_tasks")
-    private Integer pendingTasks;
-    
-    @Column(name = "in_progress_tasks")
-    private Integer inProgressTasks;
+    @Column(length = 2000)
+    private String comment;
     
     @Column(name = "created_at")
     private LocalDateTime createdAt;
@@ -46,4 +39,26 @@ public class Progress {
     protected void onUpdate() {
         updatedAt = LocalDateTime.now();
     }
+    
+    // Getters and Setters
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
+    
+    public Long getPlanId() { return planId; }
+    public void setPlanId(Long planId) { this.planId = planId; }
+    
+    public Long getTaskId() { return taskId; }
+    public void setTaskId(Long taskId) { this.taskId = taskId; }
+    
+    public Integer getProgress() { return progress; }
+    public void setProgress(Integer progress) { this.progress = progress; }
+    
+    public String getComment() { return comment; }
+    public void setComment(String comment) { this.comment = comment; }
+    
+    public LocalDateTime getCreatedAt() { return createdAt; }
+    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
+    
+    public LocalDateTime getUpdatedAt() { return updatedAt; }
+    public void setUpdatedAt(LocalDateTime updatedAt) { this.updatedAt = updatedAt; }
 }

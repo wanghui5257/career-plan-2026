@@ -15,7 +15,7 @@ public class Task {
     @Column(nullable = false)
     private String title;
     
-    @Column(columnDefinition = "TEXT")
+    @Column(columnDefinition = "CLOB")
     private String description;
     
     private String status;  // TODO, IN_PROGRESS, DONE
@@ -37,6 +37,12 @@ public class Task {
     
     @Column(name = "created_at")
     private LocalDateTime createdAt;
+    
+    @Column(name = "plan_id")
+    private Long planId;
+    
+    @Column(name = "user_id")
+    private Long userId;
     
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;

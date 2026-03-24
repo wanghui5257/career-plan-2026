@@ -4,12 +4,17 @@ server:
     context-path: /back-server
 
 spring:
+  mvc:
+    throw-exception-if-no-handler-found: true
+  web:
+    resources:
+      add-mappings: false
   application:
     name: career-plan-2026
   datasource:
     url: jdbc:mysql://localhost:3306/career_plan?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
     username: career_user
-    password: ${DB_PASSWORD:}
+    password: CareerPlan2026!
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
@@ -34,11 +39,8 @@ management:
         enabled: true
 
 jwt:
-  secret: ${JWT_SECRET:}
+  secret: v9Kx+L2RqP7mZ4wE1tY6uI8oA3sD5fG0hJ9kL1mN4pQ=
   expiration: 86400000
-
-cors:
-  allowed-origins: ${CORS_ALLOWED_ORIGINS:https://plan.shujuyunxiang.com}
 
 springdoc:
   api-docs:

@@ -18,7 +18,7 @@ public class ProgressReport {
     @Column(name = "user_id")
     private Long userId;
     
-    @Column(columnDefinition = "TEXT")
+    @Column(columnDefinition = "CLOB")
     private String content;
     
     @Column(name = "created_at")
